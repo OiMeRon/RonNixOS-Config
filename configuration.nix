@@ -5,32 +5,22 @@
 { config, pkgs, zen-browser, pkgs-unstable, ... }:
 
 let
-  # Motrix 解压（供提取文件和图标）
-  motrix-extracted = pkgs.appimageTools.extract {
-    src = ./appimages/Motrix-2.0.0-beta.39-x86_64.AppImage;
-    pname = "motrix";
-    version = "2.0.0-beta.39";
-  };
-  # Motrix AppImage 声明式封装
-  motrix-appimage = pkgs.appimageTools.wrapType2 rec {
-    pname = "motrix";
-    version = "2.0.0-beta.39";
-    src = ./appimages/Motrix-2.0.0-beta.39-x86_64.AppImage;
-    extraInstallCommands = ''
-      # 安装桌面文件
-      mkdir -p $out/share/applications
-      if [ -f ${motrix-extracted}/motrix.desktop ]; then
-        cp ${motrix-extracted}/motrix.desktop $out/share/applications/motrix.desktop
-      fi
-      # 提取图标
-      mkdir -p $out/share/icons/hicolor/256x256/apps
-      if [ -f ${motrix-extracted}/usr/share/icons/hicolor/256x256/apps/motrix.png ]; then
-        cp ${motrix-extracted}/usr/share/icons/hicolor/256x256/apps/motrix.png $out/share/icons/hicolor/256x256/apps/motrix.png
-      elif [ -f ${motrix-extracted}/.DirIcon ]; then
-        cp ${motrix-extracted}/.DirIcon $out/share/icons/hicolor/256x256/apps/motrix.png
-      fi
-    '';
-  };
+  # Motrix wrapper（AppImage 在用户目录）
+  motrix-wrapper = pkgs.writeShellScriptBin "motrix" ''
+    export LD_LIBRARY_PATH=${
+      pkgs.lib.makeLibraryPath [
+        pkgs.glib pkgs.gtk3 pkgs.qt5.qtbase pkgs.qt5.qtdeclarative pkgs.qt5.qtquickcontrols2 pkgs.SDL2
+        pkgs.libx11 pkgs.libxcursor pkgs.libxrandr
+        pkgs.libGL pkgs.libpulseaudio pkgs.pipewire pkgs.alsa-lib
+        pkgs.cups pkgs.dbus pkgs.fontconfig pkgs.freetype
+        pkgs.pango pkgs.cairo pkgs.gdk-pixbuf pkgs.openssl
+        pkgs.nspr pkgs.nss pkgs.at-spi2-core pkgs.at-spi2-atk
+        pkgs.harfbuzz pkgs.libdrm pkgs.libgbm pkgs.libuuid
+        pkgs.libsecret pkgs.wayland pkgs.zlib pkgs.stdenv.cc.cc.lib
+      ]
+    }:$LD_LIBRARY_PATH
+    exec ${pkgs.appimage-run}/bin/appimage-run $HOME/AppImages/Motrix-2.0.0-beta.39-x86_64.AppImage "$@"
+  '';
 in
 {
   imports =
@@ -180,6 +170,7 @@ in
     obsidian
     pkgs-unstable.github-desktop
     gh
+    curl
     bun
     git
     deno
@@ -202,7 +193,7 @@ in
     gnome-tweaks
     gnomeExtensions.rounded-window-corners
     brave-beta
-    motrix-appimage
+    motrix-wrapper
   ];
 
   # You can use https://search.nixos.org/ to find more packages (and options).
