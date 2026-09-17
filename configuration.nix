@@ -168,7 +168,6 @@ in
   environment.systemPackages = with pkgs; [
     pkgs-unstable.blender
     obsidian
-    pkgs-unstable.github-desktop
     gh
     curl
     bun
