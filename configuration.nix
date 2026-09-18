@@ -21,6 +21,24 @@ let
     }:$LD_LIBRARY_PATH
     exec ${pkgs.appimage-run}/bin/appimage-run $HOME/nixos-config/appimages/Motrix-2.0.0-beta.39-x86_64.AppImage "$@"
   '';
+
+  # DimAgent wrapper（解压版 Electron 应用）
+  dimagent-wrapper = pkgs.writeShellScriptBin "dimagent" ''
+    export LD_LIBRARY_PATH=$HOME/Applications/DimAgent:${
+      pkgs.lib.makeLibraryPath [
+        pkgs.glib pkgs.gtk3 pkgs.libx11 pkgs.libxcursor pkgs.libxrandr
+        pkgs.libGL pkgs.libpulseaudio pkgs.pipewire pkgs.alsa-lib
+        pkgs.cups pkgs.dbus pkgs.fontconfig pkgs.freetype
+        pkgs.pango pkgs.cairo pkgs.gdk-pixbuf pkgs.openssl
+        pkgs.nspr pkgs.nss pkgs.at-spi2-core pkgs.at-spi2-atk
+        pkgs.harfbuzz pkgs.libdrm pkgs.libgbm pkgs.libuuid
+        pkgs.libsecret pkgs.wayland pkgs.zlib pkgs.stdenv.cc.cc.lib
+        pkgs.libnotify pkgs.glib-networking pkgs.libusb1
+      ]
+    }:$LD_LIBRARY_PATH
+    cd $HOME/Applications/DimAgent
+    exec ./DimAgent "$@"
+  '';
 in
 {
   imports =
@@ -200,6 +218,7 @@ in
     gnomeExtensions.rounded-window-corners
     brave-beta
     motrix-wrapper
+    dimagent-wrapper
   ];
 
   # You can use https://search.nixos.org/ to find more packages (and options).

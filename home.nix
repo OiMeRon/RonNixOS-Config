@@ -14,6 +14,23 @@
     appimage-install.packages.${pkgs.stdenv.hostPlatform.system}.default
   ];
 
+  # Obsidian 桌面文件（修复任务栏图标）
+  home.file.".local/share/applications/obsidian.desktop" = {
+    text = ''
+      [Desktop Entry]
+      Categories=Office
+      Comment=Knowledge base
+      Exec=obsidian %u
+      Icon=obsidian
+      MimeType=x-scheme-handler/obsidian
+      Name=Obsidian
+      StartupWMClass=obsidian
+      StartupNotify=true
+      Type=Application
+      Version=1.5
+    '';
+  };
+
   # Motrix 桌面文件
   home.file.".local/share/applications/motrix.desktop" = {
     text = ''
