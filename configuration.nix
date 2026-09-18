@@ -19,7 +19,7 @@ let
         pkgs.libsecret pkgs.wayland pkgs.zlib pkgs.stdenv.cc.cc.lib
       ]
     }:$LD_LIBRARY_PATH
-    exec ${pkgs.appimage-run}/bin/appimage-run $HOME/Applications/Motrix-2.0.0-beta.39-x86_64.AppImage "$@"
+    exec ${pkgs.appimage-run}/bin/appimage-run $HOME/nixos-config/appimages/Motrix-2.0.0-beta.39-x86_64.AppImage "$@"
   '';
 in
 {
@@ -44,6 +44,13 @@ in
 
   # Enable networking
   networking.networkmanager.enable = true;
+
+  # Nix-daemon proxy settings
+  systemd.services.nix-daemon.environment = {
+    HTTP_PROXY = "http://127.0.0.1:7897";
+    HTTPS_PROXY = "http://127.0.0.1:7897";
+    ALL_PROXY = "socks://127.0.0.1:7897";
+  };
  
   # Set your time zone.
   time.timeZone = "Asia/Shanghai";
