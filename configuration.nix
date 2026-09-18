@@ -19,7 +19,7 @@ let
         pkgs.libsecret pkgs.wayland pkgs.zlib pkgs.stdenv.cc.cc.lib
       ]
     }:$LD_LIBRARY_PATH
-    exec ${pkgs.appimage-run}/bin/appimage-run $HOME/AppImages/Motrix-2.0.0-beta.39-x86_64.AppImage "$@"
+    exec ${pkgs.appimage-run}/bin/appimage-run $HOME/Applications/Motrix-2.0.0-beta.39-x86_64.AppImage "$@"
   '';
 in
 {

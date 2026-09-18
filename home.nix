@@ -14,7 +14,20 @@
     appimage-install.packages.${pkgs.stdenv.hostPlatform.system}.default
   ];
 
-  # Motrix 桌面文件由 appimageTools.wrapType2 自动生成
+  # Motrix 桌面文件
+  home.file.".local/share/applications/motrix.desktop" = {
+    text = ''
+      [Desktop Entry]
+      Name=Motrix
+      Exec=motrix %U
+      Icon=motrix-appimage
+      Type=Application
+      Categories=Network;FileTransfer;
+      Terminal=false
+      StartupWMClass=motrix
+      StartupNotify=true
+    '';
+  };
 
   programs.bash.enable = true;
 
