@@ -14,6 +14,22 @@
     appimage-install.packages.${pkgs.stdenv.hostPlatform.system}.default
   ];
 
+  # DimAgent 桌面文件
+  home.file.".local/share/applications/dimagent.desktop" = {
+    text = ''
+      [Desktop Entry]
+      Name=DimAgent
+      Comment=DimAgent - Desktop Automation
+      Exec=dimagent %U
+      Icon=dimagent
+      Type=Application
+      Categories=Utility;Development;
+      Terminal=false
+      StartupWMClass=DimAgent
+      StartupNotify=true
+    '';
+  };
+
   # Obsidian 桌面文件（修复任务栏图标）
   home.file.".local/share/applications/obsidian.desktop" = {
     text = ''
@@ -24,7 +40,7 @@
       Icon=obsidian
       MimeType=x-scheme-handler/obsidian
       Name=Obsidian
-      StartupWMClass=obsidian
+      StartupWMClass=md.Obsidian
       StartupNotify=true
       Type=Application
       Version=1.5

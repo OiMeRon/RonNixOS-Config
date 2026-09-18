@@ -26,14 +26,17 @@ let
   dimagent-wrapper = pkgs.writeShellScriptBin "dimagent" ''
     export LD_LIBRARY_PATH=$HOME/Applications/DimAgent:${
       pkgs.lib.makeLibraryPath [
-        pkgs.glib pkgs.gtk3 pkgs.libx11 pkgs.libxcursor pkgs.libxrandr
-        pkgs.libGL pkgs.libpulseaudio pkgs.pipewire pkgs.alsa-lib
-        pkgs.cups pkgs.dbus pkgs.fontconfig pkgs.freetype
-        pkgs.pango pkgs.cairo pkgs.gdk-pixbuf pkgs.openssl
-        pkgs.nspr pkgs.nss pkgs.at-spi2-core pkgs.at-spi2-atk
-        pkgs.harfbuzz pkgs.libdrm pkgs.libgbm pkgs.libuuid
-        pkgs.libsecret pkgs.wayland pkgs.zlib pkgs.stdenv.cc.cc.lib
-        pkgs.libnotify pkgs.glib-networking pkgs.libusb1
+        pkgs.alsa-lib pkgs.at-spi2-core pkgs.at-spi2-atk pkgs.cairo pkgs.cups
+        pkgs.dbus pkgs.expat pkgs.gdk-pixbuf pkgs.glib pkgs.glib-networking
+        pkgs.gtk3 pkgs.harfbuzz pkgs.atk pkgs.libxcb pkgs.libx11 pkgs.libXcomposite
+        pkgs.libXdamage pkgs.libXext pkgs.libXfixes pkgs.libxkbcommon pkgs.libXrandr
+        pkgs.libdrm pkgs.libgbm pkgs.libGL pkgs.libglvnd
+        pkgs.libuuid pkgs.libsecret pkgs.libnotify pkgs.libxinerama pkgs.libxrender
+        pkgs.mesa pkgs.nspr pkgs.nss pkgs.openssl
+        pkgs.pango pkgs.pipewire pkgs.libpulseaudio
+        pkgs.stdenv.cc.cc.lib pkgs.udev pkgs.wayland
+        pkgs.fontconfig pkgs.freetype pkgs.libxcursor pkgs.libxshmfence
+        pkgs.libusb1 pkgs.zlib pkgs.icu
       ]
     }:$LD_LIBRARY_PATH
     cd $HOME/Applications/DimAgent
