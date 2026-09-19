@@ -209,6 +209,7 @@ in
     obs-studio
     openjdk
     php
+    pkgs.gnomeExtensions.user-themes
     pnpm
     python3
     ruby
