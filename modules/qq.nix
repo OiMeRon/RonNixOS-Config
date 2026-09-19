@@ -27,11 +27,11 @@ let
     export XMODIFIERS=@im=ibus
     export ELECTRON_OZONE_PLATFORM_HINT=wayland
 
-    # 启用 Wayland 窗口装饰（圆角支持）
-    export ELECTRON_EXTRA_ARGS="--enable-features=WaylandWindowDecorations"
-
     cd ~/AppImages
-    exec ${pkgs.appimage-run}/bin/appimage-run ./QQ_3.2.33_260902_x86_64_01.AppImage $ELECTRON_EXTRA_ARGS "$@"
+    # --ozone-platform=wayland 与 Vulkan 不兼容，只启用窗口装饰
+    exec ${pkgs.appimage-run}/bin/appimage-run ./QQ_3.2.33_260902_x86_64_01.AppImage \
+      --enable-features=WaylandWindowDecorations \
+      "$@"
   '';
 
   qqDesktop = pkgs.makeDesktopItem {
