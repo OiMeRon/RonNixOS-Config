@@ -185,6 +185,7 @@
         { nixpkgs.overlays = [ braveBetaOverlay ]; }
         ./configuration.nix
         ./modules/qq.nix
+        ./modules/minimax-cli.nix
         home-manager.nixosModules.home-manager
         {
           home-manager.useGlobalPkgs = true;
