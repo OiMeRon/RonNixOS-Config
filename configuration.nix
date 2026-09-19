@@ -220,7 +220,7 @@ in
     yarn
     zen-browser.packages.${pkgs.system}.twilight
     gnome-tweaks
-    gnomeExtensions.rounded-window-corners
+    gnomeExtensions.rounded-window-corners-reborn
     brave-beta
     motrix-wrapper
     dimagent-wrapper

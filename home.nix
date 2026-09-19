@@ -75,6 +75,12 @@
       cursor-theme = "Adwaita";
     };
 
+    # Rounded Window Corners Reborn 设置
+    "org/gnome/shell/extensions/rounded-window-corners" = {
+      corner-radius = 28;
+      keep-rounded-maximized = true;
+    };
+
     # Dash to Dock 设置
     "org/gnome/shell/extensions/dash-to-dock" = {
       background-opacity = 0.0;
@@ -96,12 +102,12 @@
       enable-desktop-menu-glass = true;
       enable-application-glass = false;
 
-      # Dock 设置
-      dock-blur-radius = 15;
-      dock-corner-radius = 30;
-      dock-tint-strength = 0.15;
+      # Dock 设置（与 Dash to Dock 对齐）
+      dock-blur-radius = 12;
+      dock-corner-radius = 24;
+      dock-tint-strength = 0.25;
       dock-brightness = 0.85;
-      dock-tint-color = "#000000";
+      dock-tint-color = "#303030";
 
       # 应用窗口设置
       application-blur-radius = 8;
