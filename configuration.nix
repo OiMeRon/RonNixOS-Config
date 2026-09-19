@@ -210,6 +210,7 @@ in
     openjdk
     php
     pkgs.gnomeExtensions.user-themes
+    pkgs.gnomeExtensions.dash-to-dock
     pnpm
     python3
     ruby
