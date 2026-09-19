@@ -1,143 +1,61 @@
-# QQ - 通过 nixpak 沙盒化运行
+# QQ - 通过 AppImage 运行
 # 使用 IBus 输入法（与系统一致）
 
-{ config, pkgs, inputs, ... }:
+{ config, pkgs, ... }:
 
 let
-  mkNixPak = inputs.nixpak.lib.nixpak {
-    inherit pkgs;
-    inherit (pkgs) lib;
-  };
+  qqWrapper = pkgs.writeShellScriptBin "qq" ''
+    export LD_LIBRARY_PATH=${
+      pkgs.lib.makeLibraryPath [
+        pkgs.glib pkgs.gtk3 pkgs.libx11 pkgs.libxcursor pkgs.libxrandr
+        pkgs.libxcomposite pkgs.libxdamage pkgs.libxfixes pkgs.libxinerama
+        pkgs.libGL pkgs.libpulseaudio pkgs.pipewire pkgs.alsa-lib
+        pkgs.dbus pkgs.fontconfig pkgs.freetype pkgs.pango pkgs.cairo
+        pkgs.gdk-pixbuf pkgs.openssl pkgs.nspr pkgs.nss
+        pkgs.at-spi2-core pkgs.at-spi2-atk pkgs.harfbuzz
+        pkgs.libdrm pkgs.libgbm pkgs.libuuid pkgs.libsecret
+        pkgs.wayland pkgs.zlib pkgs.stdenv.cc.cc.lib
+        pkgs.libnotify pkgs.libxrender pkgs.libxkbcommon
+        pkgs.libxcb pkgs.libxshmfence pkgs.cups pkgs.expat
+        pkgs.udev pkgs.mesa pkgs.icu pkgs.xorg.libXrender
+      ]
+    }:$LD_LIBRARY_PATH
 
-  appId = "com.tencent.QQ";
+    # IBus 输入法配置
+    export GTK_IM_MODULE=ibus
+    export QT_IM_MODULE=ibus
+    export XMODIFIERS=@im=ibus
+    export ELECTRON_OZONE_PLATFORM_HINT=wayland
 
-  wrapped = mkNixPak {
-    config =
-      { sloth, ... }:
-      {
-        app.package = pkgs.qq;
-        app.binPath = "bin/qq";
-        flatpak.appId = appId;
-        fonts.enable = false;
+    # 启用 Wayland 窗口装饰（圆角支持）
+    export ELECTRON_EXTRA_ARGS="--enable-features=WaylandWindowDecorations"
 
-        dbus.enable = true;
-        dbus.policies = {
-          "org.freedesktop.portal.Notification" = "talk";
-          "org.freedesktop.portal.Settings" = "talk";
-          "org.freedesktop.portal.Screenshot" = "talk";
-          "org.freedesktop.Notifications" = "talk";
-          "ca.desrt.dconf" = "talk";
-          "org.kde.StatusNotifierWatcher" = "talk";
-          "org.freedesktop.StatusNotifierHost" = "own";
-        };
-
-        etc.sslCertificates.enable = true;
-
-        gpu.enable = true;
-        gpu.provider = "bundle";
-
-        bubblewrap = {
-          network = true;
-
-          env = {
-            GTK_IM_MODULE = "ibus";
-            QT_IM_MODULE = "ibus";
-            XMODIFIERS = "@im=ibus";
-            ELECTRON_OZONE_PLATFORM_HINT = "wayland";
-          };
-
-          bind.dev = [
-            "/dev/dri"
-            "/dev/snd"
-            "/dev/shm"
-            "/dev/video0"
-          ];
-
-          bind.rw = with sloth; [
-            (sloth.concat [
-              sloth.runtimeDir
-              "/"
-              (sloth.envOr "WAYLAND_DISPLAY" "no")
-            ])
-            (sloth.concat' sloth.runtimeDir "/at-spi/bus")
-            (sloth.concat' sloth.runtimeDir "/gvfsd")
-            (sloth.concat' sloth.runtimeDir "/dconf")
-
-            (sloth.concat' sloth.xdgCacheHome "/fontconfig")
-            (sloth.concat' sloth.xdgCacheHome "/mesa_shader_cache")
-            (sloth.concat' sloth.xdgCacheHome "/mesa_shader_cache_db")
-            (sloth.concat' sloth.xdgCacheHome "/radv_builtin_shaders")
-
-            (sloth.env "XDG_RUNTIME_DIR")
-            (sloth.mkdir "/tmp/QQ")
-
-            (sloth.concat' sloth.runtimeDir "/doc")
-
-            # QQ 配置和数据
-            [
-              (sloth.mkdir (sloth.concat' sloth.homeDir "/data/Programs/Chat/qq/config"))
-              (sloth.concat' sloth.homeDir "/.config/QQ")
-            ]
-
-            # QQ 下载文件
-            [
-              (sloth.mkdir (sloth.concat' sloth.homeDir "/data/Soft_tmp/Chat/qq/Downloads"))
-              (sloth.concat' sloth.homeDir "/Downloads")
-            ]
-          ];
-
-          bind.ro = [
-            (sloth.concat' sloth.xdgConfigHome "/kdeglobals")
-            (sloth.concat' sloth.xdgConfigHome "/gtk-2.0")
-            (sloth.concat' sloth.xdgConfigHome "/gtk-3.0")
-            (sloth.concat' sloth.xdgConfigHome "/gtk-4.0")
-            (sloth.concat' sloth.xdgConfigHome "/fontconfig")
-            (sloth.concat' sloth.xdgConfigHome "/dconf")
-
-            "/etc/fonts"
-            "/etc/localtime"
-            "/etc/egl"
-            "/etc/static/egl"
-            "/etc/static/alsa"
-            "/etc/alsa"
-
-            "/run/current-system/sw/share/mime"
-            "/run/current-system/sw/share/icons"
-            "/run/current-system/sw/share/applications"
-            "/run/current-system/sw/share/fonts"
-          ];
-
-          sockets = {
-            wayland = true;
-            x11 = false;
-            pipewire = true;
-          };
-        };
-      };
-  };
-
-  qqWrapper = pkgs.writeShellScriptBin "qq-sandboxed" ''
-    exec ${pkgs.lib.getExe wrapped.config.script} "$@"
+    cd ~/AppImages
+    exec ${pkgs.appimage-run}/bin/appimage-run ./QQ_3.2.33_260902_x86_64_01.AppImage $ELECTRON_EXTRA_ARGS "$@"
   '';
 
   qqDesktop = pkgs.makeDesktopItem {
-    name = "qq-sandboxed";
-    desktopName = "QQ (Sandboxed)";
+    name = "qq";
+    desktopName = "QQ";
     genericName = "QQ";
-    comment = "Tencent QQ - Running in nixpak sandbox";
-    exec = "qq-sandboxed %U";
+    comment = "Tencent QQ";
+    exec = "qq %U";
     startupNotify = true;
     startupWMClass = "QQ";
     terminal = false;
-    icon = "${pkgs.qq}/share/icons/hicolor/512x512/apps/qq.png";
+    icon = "qq";
     type = "Application";
     categories = [ "InstantMessaging" "Network" ];
     mimeTypes = [ "x-scheme-handler/qq" ];
   };
 in
 {
-  environment.systemPackages = [ qqWrapper qqDesktop ];
+  environment.systemPackages = [
+    qqWrapper
+    qqDesktop
+    pkgs.appimage-run
+  ];
 
-  # QQ 需要内核支持（可选，但推荐）
+  # QQ 需要内核支持（inotify）
   boot.kernel.sysctl."max_user_watches" = 524288;
 }

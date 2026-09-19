@@ -26,13 +26,9 @@
       url = "https://gh-proxy.com/https://github.com/rxtsel/appimage-install/archive/main.tar.gz";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    nixpak = {
-      url = "github:serokell/nixpak";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
   };
 
-  outputs = { self, nixpkgs, home-manager, zen-browser, nixpkgs-unstable, appimage-install, nixpak, ... }:
+  outputs = { self, nixpkgs, home-manager, zen-browser, nixpkgs-unstable, appimage-install, ... }:
 
   let
     braveBetaOverlay = final: prev:
@@ -179,7 +175,7 @@
     nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
       specialArgs = {
-        inherit zen-browser appimage-install nixpak;
+        inherit zen-browser appimage-install;
         pkgs-unstable = import nixpkgs-unstable {
           system = "x86_64-linux";
           config.allowUnfree = true;
