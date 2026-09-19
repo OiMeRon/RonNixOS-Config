@@ -64,6 +64,16 @@
 
   programs.bash.enable = true;
 
+  # GNOME 主题设置
+  dconf.settings = {
+    "org/gnome/shell/extensions/user-theme" = {
+      name = "MacTahoe-Dark";
+    };
+    "org/gnome/desktop/interface" = {
+      gtk-theme = "MacTahoe-Dark";
+    };
+  };
+
   # 自动提交脚本
   home.file.".local/bin/git-sync" = {
     source = pkgs.writeShellScript "git-sync" ''
