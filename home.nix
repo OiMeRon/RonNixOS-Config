@@ -71,6 +71,86 @@
     };
     "org/gnome/desktop/interface" = {
       gtk-theme = "MacTahoe-Dark";
+      icon-theme = "Adwaita";
+      cursor-theme = "Adwaita";
+    };
+
+    # Dash to Dock 设置
+    "org/gnome/shell/extensions/dash-to-dock" = {
+      background-opacity = 0.0;
+      custom-background-color = false;
+      apply-custom-theme = false;
+      autohide = true;
+      dock-fixed = false;
+      dock-position = "BOTTOM";
+    };
+
+    # Liquid Glass 扩展设置
+    "org/gnome/shell/extensions/liquid-glass" = {
+      # 启用各元素玻璃效果
+      enable-dock-glass = true;
+      enable-menu-glass = true;
+      enable-notification-glass = true;
+      enable-quick-settings-glass = true;
+      enable-osd-glass = true;
+      enable-desktop-menu-glass = true;
+      enable-application-glass = false;
+
+      # Dock 设置
+      dock-blur-radius = 15;
+      dock-corner-radius = 30;
+      dock-tint-strength = 0.15;
+      dock-brightness = 0.85;
+      dock-tint-color = "#000000";
+
+      # 应用窗口设置
+      application-blur-radius = 8;
+      application-corner-radius = 25;
+      application-tint-strength = 0.08;
+      application-content-opacity = 0.8;
+      application-brightness = 0.85;
+      application-tint-color = "#3d3846";
+
+      # 玻璃物理效果
+      glass-ior = 2.8;
+      glass-displacement-scale = 80;
+      glass-edge-smoothing = 1.5;
+      glass-max-z = 30;
+      glass-specular-intensity = 1.2;
+      glass-chroma-strength = 3.5;
+      glass-profile-shape-n = 8;
+      glass-blur-downscale = 2;
+
+      # 快速设置
+      quick-settings-apply-to = 0; # Background 模式
+      quick-settings-tint-color = "#ffffff";
+      quick-settings-tint-strength = 0.08;
+      quick-settings-brightness = 0.85;
+      quick-settings-enable-adaptive-text-color = true;
+
+      # 采样设置（更快响应）
+      menu-sample-interval-ms = 50;
+      notification-sample-interval-ms = 50;
+      quick-settings-sample-interval-ms = 50;
+      osd-sample-interval-ms = 50;
+      panel-menu-sample-interval-ms = 50;
+      menu-sample-per-element = true;
+      quick-settings-sample-per-element = true;
+
+      # 菜单弹性
+      menu-spring-stiffness = 150;
+      menu-spring-damping = 40;
+      menu-spring-mass = 0.25;
+
+      # 快速设置弹性
+      quick-settings-spring-stiffness = 150;
+      quick-settings-spring-damping = 40;
+      quick-settings-spring-mass = 0.25;
+
+      # 面板菜单弹性
+      panel-menu-spring-stiffness = 150;
+      panel-menu-spring-damping = 40;
+      panel-menu-spring-mass = 0.25;
     };
   };
 
