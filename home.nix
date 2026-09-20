@@ -8,6 +8,7 @@
   # kimi 的路径
   home.sessionPath = [
     "/home/ron/.kimi-code/bin"
+    "/home/ron/.minimax-code/releases/0.4.12/bin"
   ];
 
   home.packages = [
