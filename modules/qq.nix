@@ -27,7 +27,7 @@ let
     export XMODIFIERS=@im=ibus
     export ELECTRON_OZONE_PLATFORM_HINT=wayland
 
-    cd ~/AppImages
+    cd ~/OmniStudio/Applications/AppImage
     # --ozone-platform=wayland 与 Vulkan 不兼容，只启用窗口装饰
     exec ${pkgs.appimage-run}/bin/appimage-run ./QQ_3.2.33_260902_x86_64_01.AppImage \
       --enable-features=WaylandWindowDecorations \
