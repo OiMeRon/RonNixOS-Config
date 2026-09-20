@@ -7,11 +7,13 @@ let
   wechatPackage = let
     pname = "wechat";
     version = "4.1.13";
-    # 使用本地 AppImage（不重新下载）
-    localAppImage = ./../appimages/WeChat.AppImage;
+    # 从腾讯 CDN 下载（国内直连，稳定）
     appimageContents = pkgs.appimageTools.extract {
       inherit pname version;
-      src = localAppImage;
+      src = pkgs.fetchurl {
+        url = "https://dldir1.qq.com/weixin/Universal/Linux/WeChatLinux_x86_64.AppImage";
+        hash = "sha256-T1StKQLs1vb9xWgLc1R/gNVCO/RwsBI3pXmi5bPK7us=";
+      };
       postExtract = ''
         patchelf --replace-needed libtiff.so.5 libtiff.so $out/opt/wechat/wechat
       '';
