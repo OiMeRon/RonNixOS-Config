@@ -4,18 +4,10 @@
 
 let
   gopeedWrapper = pkgs.writeShellScriptBin "gopeed" ''
-    APPDIR=/home/ron/.cache/gopeed-extract
-    if [ ! -d "$APPDIR/squashfs-root" ]; then
-      mkdir -p "$APPDIR"
-      cd "$APPDIR"
-      appimage-run /home/ron/OmniStudio/Applications/AppImage/Gopeed-v1.9.3-linux-amd64.AppImage --appimage-extract >/dev/null 2>&1 || true
-      # 如果 appimage-run 解压失败，手动复制
-      if [ ! -d "$APPDIR/squashfs-root" ]; then
-        cp -r /home/ron/.cache/appimage-run/*/ "$APPDIR/squashfs-root" 2>/dev/null || true
-      fi
-    fi
+    # 指向 appimage-run 已解压的目录
+    APPDIR=/home/ron/.cache/appimage-run/cc641ec5d2350e38cd4b955412ab0e0355ac01931e6b082404beef464d6f946c
 
-    export LD_LIBRARY_PATH="$APPDIR/squashfs-root/lib:$APPDIR/squashfs-root/usr/lib:${
+    export LD_LIBRARY_PATH="$APPDIR/lib:$APPDIR/usr/lib:${
       pkgs.lib.makeLibraryPath [
         pkgs.glib pkgs.gtk3 pkgs.libx11 pkgs.libxcursor pkgs.libxrandr
         pkgs.libxcomposite pkgs.libxdamage pkgs.libxfixes pkgs.libxinerama
@@ -33,8 +25,8 @@ let
 
     export ELECTRON_OZONE_PLATFORM_HINT=wayland
 
-    cd "$APPDIR/squashfs-root"
-    exec ./AppRun \
+    cd "$APPDIR"
+    exec ./gopeed \
       --enable-features=WaylandWindowDecorations \
       --no-sandbox \
       "$@"

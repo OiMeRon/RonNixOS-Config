@@ -187,6 +187,7 @@
         ./modules/qq.nix
         ./modules/wechat.nix
         ./modules/gopeed.nix
+        ./modules/tolaria.nix
         home-manager.nixosModules.home-manager
         {
           home-manager.useGlobalPkgs = true;
