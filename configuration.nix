@@ -92,6 +92,7 @@ in
   fonts.packages = with pkgs; [
     noto-fonts-cjk-sans
     noto-fonts-cjk-serif
+    noto-fonts-color-emoji
   ];
 
   i18n.extraLocaleSettings = {
@@ -194,6 +195,8 @@ in
 
   # List packages installed in system profile.
   environment.systemPackages = with pkgs; [
+    adwaita-icon-theme
+    gnome-themes-extra
     pkgs-unstable.blender
     obsidian
     gh

@@ -41,7 +41,7 @@
       Icon=obsidian
       MimeType=x-scheme-handler/obsidian
       Name=Obsidian
-      StartupWMClass=md.Obsidian
+      StartupWMClass=obsidian
       StartupNotify=true
       Type=Application
       Version=1.5
@@ -146,6 +146,44 @@
       panel-menu-spring-damping = 40;
       panel-menu-spring-mass = 0.25;
     };
+  };
+
+  # 确保应用图标可见（系统 hicolor 缓存只读，用户级兜底）
+  home.file."local/share/icons/hicolor/index.theme" = {
+    text = ''
+      [Icon Theme]
+      Name=hicolor
+      Comment=Fallback icon theme
+      Directories=16x16/apps,32x32/apps,48x48/apps,64x64/apps,128x128/apps,256x256/apps,512x512/apps
+
+      [16x16/apps]
+      Size=16
+      Type=Threshold
+
+      [32x32/apps]
+      Size=32
+      Type=Threshold
+
+      [48x48/apps]
+      Size=48
+      Type=Threshold
+
+      [64x64/apps]
+      Size=64
+      Type=Threshold
+
+      [128x128/apps]
+      Size=128
+      Type=Threshold
+
+      [256x256/apps]
+      Size=256
+      Type=Threshold
+
+      [512x512/apps]
+      Size=512
+      Type=Threshold
+    '';
   };
 
   # 自动提交脚本
