@@ -195,11 +195,6 @@ in
 
   # List packages installed in system profile.
   environment.systemPackages = with pkgs; [
-    fontconfig
-    freetype
-    gtk4
-    hicolor-icon-theme
-    adwaita-icon-theme
     pkgs-unstable.blender
     obsidian
     gh
