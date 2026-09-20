@@ -7,12 +7,11 @@ let
   wechatPackage = let
     pname = "wechat";
     version = "4.1.13";
+    # 使用本地 AppImage（不重新下载）
+    localAppImage = ./../appimages/WeChat.AppImage;
     appimageContents = pkgs.appimageTools.extract {
       inherit pname version;
-      src = pkgs.fetchurl {
-        url = "https://dldir1.qq.com/weixin/Universal/Linux/WeChatLinux_x86_64.AppImage";
-        hash = "sha256-T1StKQLs1vb9xWgLc1R/gNVCO/RwsBI3pXmi5bPK7us=";
-      };
+      src = localAppImage;
       postExtract = ''
         patchelf --replace-needed libtiff.so.5 libtiff.so $out/opt/wechat/wechat
       '';
@@ -22,33 +21,10 @@ let
     inherit pname version;
     src = appimageContents;
     extraPkgs = pkgs: with pkgs; [
-      gtk3
-      glib
-      dbus
-      fontconfig
-      freetype
-      pango
-      cairo
-      gdk-pixbuf
-      openssl
-      nspr
-      nss
-      at-spi2-core
-      at-spi2-atk
-      harfbuzz
-      libdrm
-      libgbm
-      libsecret
-      pipewire
-      alsa-lib
-      libnotify
-      libxkbcommon
-      libxcb
-      libxshmfence
-      cups
-      udev
-      mesa
-      icu
+      gtk3 glib dbus fontconfig freetype pango cairo gdk-pixbuf
+      openssl nspr nss at-spi2-core at-spi2-atk harfbuzz
+      libdrm libgbm libsecret pipewire alsa-lib libnotify
+      libxkbcommon libxcb libxshmfence cups udev mesa icu
     ];
     extraInstallCommands = ''
       mkdir -p $out/share/applications

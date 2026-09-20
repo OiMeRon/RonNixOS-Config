@@ -4,6 +4,9 @@
 { config, pkgs, ... }:
 
 let
+  # 使用本地 AppImage（不重新下载）
+  localAppImage = ./../appimages/QQ.AppImage
+  
   qqWrapper = pkgs.writeShellScriptBin "qq" ''
     export LD_LIBRARY_PATH=${
       pkgs.lib.makeLibraryPath [
@@ -29,7 +32,7 @@ let
 
     cd ~/AppImages
     # --ozone-platform=wayland 与 Vulkan 不兼容，只启用窗口装饰
-    exec ${pkgs.appimage-run}/bin/appimage-run ./QQ_3.2.33_260902_x86_64_01.AppImage \
+    exec ${pkgs.appimage-run}/bin/appimage-run ${localAppImage} \
       --enable-features=WaylandWindowDecorations \
       "$@"
   '';
