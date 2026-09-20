@@ -17,58 +17,6 @@
     pkgs.imagemagick
   ];
 
-  home.activation.icon-cache = ''
-    $DRY_RUN_CMD rm -rf $HOME/.local/share/icons/hicolor/
-    $DRY_RUN_CMD mkdir -p $HOME/.local/share/icons/hicolor
-    $DRY_RUN_CMD cp -rL /run/current-system/sw/share/icons/hicolor/. $HOME/.local/share/icons/hicolor/ 2>/dev/null || true
-    $DRY_RUN_CMD cp -rL /run/current-system/sw/share/icons/Adwaita/16x16/. $HOME/.local/share/icons/hicolor/16x16/ 2>/dev/null || true
-    $DRY_RUN_CMD cp -rL /run/current-system/sw/share/icons/Adwaita/scalable/. $HOME/.local/share/icons/hicolor/scalable/ 2>/dev/null || true
-    $DRY_RUN_CMD ICON_THEME=$(find /nix/store -maxdepth 1 -name '*-gnome-icon-theme' -type d | head -1)
-    for size in 48x48 256x256 128x128 64x64 32x32 22x22 16x16 scalable; do
-      for category in places actions animations categories devices emblems filesystems mimetypes status apps; do
-        src="$ICON_THEME/share/icons/gnome/$size/$category"
-        if [ -d "$src" ]; then
-          $DRY_RUN_CMD mkdir -p $HOME/.local/share/icons/hicolor/$size/$category
-          $DRY_RUN_CMD cp -rL "$src/." $HOME/.local/share/icons/hicolor/$size/$category/ 2>/dev/null || true
-        fi
-      done
-    done
-    $DRY_RUN_CMD chmod -R u+w $HOME/.local/share/icons/hicolor/
-    $DRY_RUN_CMD mkdir -p $HOME/.local/share/icons/hicolor/256x256/apps
-    $DRY_RUN_CMD find /run/current-system/sw/share/icons/hicolor -name "firefox.png" -exec cp -L {} $HOME/.local/share/icons/hicolor/256x256/apps/ \; 2>/dev/null || true
-    $DRY_RUN_CMD cp -L /run/current-system/sw/share/icons/hicolor/128x128/apps/zen-twilight.png $HOME/.local/share/icons/hicolor/256x256/apps/zen-twilight.png 2>/dev/null || true
-    $DRY_RUN_CMD chmod u+w $HOME/.local/share/icons/hicolor/256x256/apps/zen-twilight.png 2>/dev/null || true
-    $DRY_RUN_CMD ${pkgs.imagemagick}/bin/magick $HOME/.local/share/icons/hicolor/256x256/apps/zen-twilight.png -resize 256x256 $HOME/.local/share/icons/hicolor/256x256/apps/zen-twilight.png 2>/dev/null || true
-    $DRY_RUN_CMD find /run/current-system/sw/share/icons/hicolor -name "clash-verge.png" -exec cp -L {} $HOME/.local/share/icons/hicolor/256x256/apps/ \; 2>/dev/null || true
-    $DRY_RUN_CMD cp -L /home/ron/.cache/appimage-run/52b7bcb1e7b146f5666279ac0da4e549d995135ded67bd1b9129add45fe90b14/usr/share/icons/hicolor/512x512/apps/qq.png $HOME/.local/share/icons/hicolor/256x256/apps/ 2>/dev/null || true
-    $DRY_RUN_CMD cp -L /home/ron/.cache/appimage-run/f752967c69a45421a4b4536e88a4ee1400382a6b5d889c07c1ed8147eac87b32/usr/share/icons/hicolor/256x256/apps/motrix.png $HOME/.local/share/icons/hicolor/256x256/apps/motrix-appimage.png 2>/dev/null || true
-    $DRY_RUN_CMD cp -L /home/ron/.cache/appimage-run/4f54ad2902ecd6f6fdc5680b73547f80d5423bf470b01237a579a2e5b3caeeeb/wechat.png $HOME/.local/share/icons/hicolor/256x256/apps/ 2>/dev/null || true
-    $DRY_RUN_CMD cp -L /home/ron/Data/apps/icons/gopeed.svg $HOME/.local/share/icons/hicolor/scalable/apps/ 2>/dev/null || true
-    $DRY_RUN_CMD cp -L /home/ron/.cache/appimage-run/cc641ec5d2350e38cd4b955412ab0e0355ac01931e6b082404beef464d6f946c/usr/share/icons/hicolor/256x256/apps/gopeed.svg $HOME/.local/share/icons/hicolor/256x256/apps/ 2>/dev/null || true
-    $DRY_RUN_CMD ${pkgs.gtk3}/bin/gtk-update-icon-cache -f $HOME/.local/share/icons/hicolor/ 2>&1 || true
-  '';
-    $DRY_RUN_CMD rm -rf $HOME/.local/share/icons/hicolor/
-    $DRY_RUN_CMD mkdir -p $HOME/.local/share/icons/hicolor
-    $DRY_RUN_CMD cp -rL /run/current-system/sw/share/icons/hicolor/. $HOME/.local/share/icons/hicolor/ 2>/dev/null || true
-    $DRY_RUN_CMD cp -rL /run/current-system/sw/share/icons/Adwaita/16x16/. $HOME/.local/share/icons/hicolor/16x16/ 2>/dev/null || true
-    $DRY_RUN_CMD cp -rL /run/current-system/sw/share/icons/Adwaita/scalable/. $HOME/.local/share/icons/hicolor/scalable/ 2>/dev/null || true
-    $DRY_RUN_CMD ICON_THEME=$(ls -d /nix/store/*gnome-icon-theme* | head -1) && cp -rL $ICON_THEME/share/icons/gnome/48x48/places/. $HOME/.local/share/icons/hicolor/48x48/places/ 2>/dev/null || true
-    $DRY_RUN_CMD ICON_THEME=$(ls -d /nix/store/*gnome-icon-theme* | head -1) && cp -rL $ICON_THEME/share/icons/gnome/scalable/places/. $HOME/.local/share/icons/hicolor/scalable/places/ 2>/dev/null || true
-    $DRY_RUN_CMD ICON_THEME=$(ls -d /nix/store/*gnome-icon-theme* | head -1) && cp -rL $ICON_THEME/share/icons/gnome/256x256/places/. $HOME/.local/share/icons/hicolor/256x256/places/ 2>/dev/null || true
-    $DRY_RUN_CMD chmod -R u+w $HOME/.local/share/icons/hicolor/
-    $DRY_RUN_CMD mkdir -p $HOME/.local/share/icons/hicolor/256x256/apps
-    $DRY_RUN_CMD find /run/current-system/sw/share/icons/hicolor -name "firefox.png" -exec cp -L {} $HOME/.local/share/icons/hicolor/256x256/apps/ \; 2>/dev/null || true
-    $DRY_RUN_CMD cp -L /run/current-system/sw/share/icons/hicolor/128x128/apps/zen-twilight.png $HOME/.local/share/icons/hicolor/256x256/apps/zen-twilight.png 2>/dev/null || true
-    $DRY_RUN_CMD chmod u+w $HOME/.local/share/icons/hicolor/256x256/apps/zen-twilight.png 2>/dev/null || true
-    $DRY_RUN_CMD ${pkgs.imagemagick}/bin/magick $HOME/.local/share/icons/hicolor/256x256/apps/zen-twilight.png -resize 256x256 $HOME/.local/share/icons/hicolor/256x256/apps/zen-twilight.png 2>/dev/null || true
-    $DRY_RUN_CMD find /run/current-system/sw/share/icons/hicolor -name "clash-verge.png" -exec cp -L {} $HOME/.local/share/icons/hicolor/256x256/apps/ \; 2>/dev/null || true
-    $DRY_RUN_CMD cp -L /home/ron/.cache/appimage-run/52b7bcb1e7b146f5666279ac0da4e549d995135ded67bd1b9129add45fe90b14/usr/share/icons/hicolor/512x512/apps/qq.png $HOME/.local/share/icons/hicolor/256x256/apps/ 2>/dev/null || true
-    $DRY_RUN_CMD cp -L /home/ron/.cache/appimage-run/f752967c69a45421a4b4536e88a4ee1400382a6b5d889c07c1ed8147eac87b32/usr/share/icons/hicolor/256x256/apps/motrix.png $HOME/.local/share/icons/hicolor/256x256/apps/motrix-appimage.png 2>/dev/null || true
-    $DRY_RUN_CMD cp -L /home/ron/.cache/appimage-run/4f54ad2902ecd6f6fdc5680b73547f80d5423bf470b01237a579a2e5b3caeeeb/wechat.png $HOME/.local/share/icons/hicolor/256x256/apps/ 2>/dev/null || true
-    $DRY_RUN_CMD cp -L /home/ron/Data/apps/icons/gopeed.svg $HOME/.local/share/icons/hicolor/scalable/apps/ 2>/dev/null || true
-    $DRY_RUN_CMD cp -L /home/ron/.cache/appimage-run/cc641ec5d2350e38cd4b955412ab0e0355ac01931e6b082404beef464d6f946c/usr/share/icons/hicolor/256x256/apps/gopeed.svg $HOME/.local/share/icons/hicolor/256x256/apps/ 2>/dev/null || true
-    $DRY_RUN_CMD ${pkgs.gtk3}/bin/gtk-update-icon-cache -f $HOME/.local/share/icons/hicolor/ 2>&1 || true
-  '';
 
   # DimAgent 桌面文件
   home.file.".local/share/applications/dimagent.desktop" = {
@@ -114,7 +62,7 @@
     };
     "org/gnome/desktop/interface" = {
       gtk-theme = "MacTahoe-Dark";
-      icon-theme = "hicolor";
+      icon-theme = "Adwaita";
       cursor-theme = "Adwaita";
     };
 
@@ -145,12 +93,16 @@
       enable-desktop-menu-glass = true;
       enable-application-glass = false;
 
-      # Dock 设置（与 Dash to Dock 对齐）
-      dock-blur-radius = 12;
+      # Dock 设置（自适应效果）
+      dock-blur-radius = 15;
       dock-corner-radius = 24;
-      dock-tint-strength = 0.25;
+      dock-tint-strength = 0.15;
       dock-brightness = 0.85;
       dock-tint-color = "#303030";
+      dock-glass-expand = 1;
+      dock-margin-bottom = 3;
+      dock-saturation = 0.0;
+      dock-contrast = 1.15;
 
       # 应用窗口设置
       application-blur-radius = 8;

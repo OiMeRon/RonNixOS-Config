@@ -196,4 +196,9 @@ in
 
   system.stateVersion = "26.05";
 
+  system.activationScripts.icon-cache = ''
+    ${pkgs.gtk3}/bin/gtk-update-icon-cache -f /run/current-system/sw/share/icons/hicolor/ 2>/dev/null || true
+    ${pkgs.gtk3}/bin/gtk-update-icon-cache -f /run/current-system/sw/share/icons/Adwaita/ 2>/dev/null || true
+  '';
+
 }
