@@ -188,6 +188,7 @@ in
     yarn
     zen-browser.packages.${pkgs.system}.twilight
     gnome-tweaks
+    gnome-icon-theme
     gnomeExtensions.rounded-window-corners-reborn
     motrix-wrapper
     dimagent-wrapper
