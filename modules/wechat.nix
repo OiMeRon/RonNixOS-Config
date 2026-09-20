@@ -97,7 +97,4 @@ in
     wechatWrapper
     wechatDesktop
   ];
-
-  # 微信需要 inotify 支持
-  boot.kernel.sysctl."max_user_watches" = 524288;
 }
