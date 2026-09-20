@@ -59,7 +59,7 @@ let
     '';
   };
 
-  # Wrapper 脚本：适配 Wayland + IBus
+  # Wrapper 脚本：适配 Wayland + IBus + HiDPI
   wechatWrapper = pkgs.writeShellScriptBin "wechat" ''
     # IBus 输入法（与系统一致）
     export GTK_IM_MODULE=ibus
@@ -69,10 +69,14 @@ let
     # Wayland 适配
     export ELECTRON_OZONE_PLATFORM_HINT=wayland
 
+    # HiDPI 缩放（解决字体太小）
+    export GDK_SCALE=2
+
     # 禁用 GPU 沙盒（避免 Wayland 下崩溃）
     exec ${wechatPackage}/bin/wechat \
       --no-sandbox \
       --disable-gpu-sandbox \
+      --force-device-scale-factor=2 \
       "$@"
   '';
 
