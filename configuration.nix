@@ -198,6 +198,8 @@ in
     fontconfig
     freetype
     gtk4
+    hicolor-icon-theme
+    adwaita-icon-theme
     pkgs-unstable.blender
     obsidian
     gh
