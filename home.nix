@@ -21,6 +21,8 @@
     $DRY_RUN_CMD rm -rf $HOME/.local/share/icons/hicolor/
     $DRY_RUN_CMD mkdir -p $HOME/.local/share/icons/hicolor
     $DRY_RUN_CMD cp -rL /run/current-system/sw/share/icons/hicolor/. $HOME/.local/share/icons/hicolor/ 2>/dev/null || true
+    $DRY_RUN_CMD cp -rL /run/current-system/sw/share/icons/Adwaita/256x256/. $HOME/.local/share/icons/hicolor/256x256/ 2>/dev/null || true
+    $DRY_RUN_CMD cp -rL /run/current-system/sw/share/icons/Adwaita/scalable/. $HOME/.local/share/icons/hicolor/scalable/ 2>/dev/null || true
     $DRY_RUN_CMD chmod -R u+w $HOME/.local/share/icons/hicolor/
     $DRY_RUN_CMD mkdir -p $HOME/.local/share/icons/hicolor/256x256/apps
     $DRY_RUN_CMD find /run/current-system/sw/share/icons/hicolor -name "firefox.png" -exec cp -L {} $HOME/.local/share/icons/hicolor/256x256/apps/ \; 2>/dev/null || true
@@ -30,6 +32,9 @@
     $DRY_RUN_CMD find /run/current-system/sw/share/icons/hicolor -name "clash-verge.png" -exec cp -L {} $HOME/.local/share/icons/hicolor/256x256/apps/ \; 2>/dev/null || true
     $DRY_RUN_CMD cp -L /home/ron/.cache/appimage-run/52b7bcb1e7b146f5666279ac0da4e549d995135ded67bd1b9129add45fe90b14/usr/share/icons/hicolor/512x512/apps/qq.png $HOME/.local/share/icons/hicolor/256x256/apps/ 2>/dev/null || true
     $DRY_RUN_CMD cp -L /home/ron/.cache/appimage-run/f752967c69a45421a4b4536e88a4ee1400382a6b5d889c07c1ed8147eac87b32/usr/share/icons/hicolor/256x256/apps/motrix.png $HOME/.local/share/icons/hicolor/256x256/apps/motrix-appimage.png 2>/dev/null || true
+    $DRY_RUN_CMD cp -L /home/ron/.cache/appimage-run/4f54ad2902ecd6f6fdc5680b73547f80d5423bf470b01237a579a2e5b3caeeeb/wechat.png $HOME/.local/share/icons/hicolor/256x256/apps/ 2>/dev/null || true
+    $DRY_RUN_CMD cp -L /home/ron/Data/apps/icons/gopeed.svg $HOME/.local/share/icons/hicolor/scalable/apps/ 2>/dev/null || true
+    $DRY_RUN_CMD cp -L /home/ron/.cache/appimage-run/cc641ec5d2350e38cd4b955412ab0e0355ac01931e6b082404beef464d6f946c/usr/share/icons/hicolor/256x256/apps/gopeed.svg $HOME/.local/share/icons/hicolor/256x256/apps/ 2>/dev/null || true
     $DRY_RUN_CMD ${pkgs.gtk3}/bin/gtk-update-icon-cache -f $HOME/.local/share/icons/hicolor/ 2>&1 || true
   '';
 

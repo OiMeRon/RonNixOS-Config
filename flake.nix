@@ -39,7 +39,6 @@
         };
       };
       modules = [
-        ./modules/brave-overlay.nix
         ./configuration.nix
         ./modules/qq.nix
         ./modules/wechat.nix
