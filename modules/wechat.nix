@@ -11,7 +11,7 @@ let
       inherit pname version;
       src = pkgs.fetchurl {
         url = "https://dldir1.qq.com/weixin/Universal/Linux/WeChatLinux_x86_64.AppImage";
-        hash = "sha256-ay4g5wAGNy6N37rkDqhkVkUgyHsH0BYLYA7JP3j9XMI=";
+        hash = "sha256-T1StKQLs1vb9xWgLc1R/gNVCO/RwsBI3pXmi5bPK7us=";
       };
       postExtract = ''
         patchelf --replace-needed libtiff.so.5 libtiff.so $out/opt/wechat/wechat
