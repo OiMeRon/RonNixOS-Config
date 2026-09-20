@@ -195,7 +195,6 @@ in
 
   # List packages installed in system profile.
   environment.systemPackages = with pkgs; [
-    hicolor-icon-theme
     pkgs-unstable.blender
     obsidian
     gh
