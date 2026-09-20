@@ -186,7 +186,7 @@
         ./configuration.nix
         ./modules/qq.nix
         ./modules/wechat.nix
-        ./modules/minimax-cli.nix
+        ./modules/gopeed.nix
         home-manager.nixosModules.home-manager
         {
           home-manager.useGlobalPkgs = true;

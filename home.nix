@@ -48,20 +48,7 @@
     '';
   };
 
-  # Motrix 桌面文件
-  home.file.".local/share/applications/motrix.desktop" = {
-    text = ''
-      [Desktop Entry]
-      Name=Motrix
-      Exec=motrix %U
-      Icon=motrix-appimage
-      Type=Application
-      Categories=Network;FileTransfer;
-      Terminal=false
-      StartupWMClass=motrix
-      StartupNotify=true
-    '';
-  };
+  # Motrix 桌面文件（由 AppImage 自带，无需声明）
 
   programs.bash.enable = true;
 
