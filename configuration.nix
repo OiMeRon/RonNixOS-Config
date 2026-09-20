@@ -5,41 +5,27 @@
 { config, pkgs, zen-browser, pkgs-unstable, ... }:
 
 let
-  # Motrix wrapper（AppImage 在用户目录）
+  commonLibs = with pkgs; [
+    alsa-lib at-spi2-core at-spi2-atk cairo cups dbus expat
+    fontconfig freetype gdk-pixbuf glib glib-networking gtk3
+    harfbuzz atk libxcb libx11 libXcomposite libXdamage libXext
+    libXfixes libxkbcommon libXrandr libdrm libgbm libGL libglvnd
+    libuuid libsecret libnotify libxinerama libxrender mesa nspr nss
+    openssl pango pipewire libpulseaudio stdenv.cc.cc.lib udev wayland
+    libxcursor libxshmfence libusb1 zlib icu
+  ];
+
+  motrixPath = "$HOME/OmniStudio/Applications/AppImage/Motrix-2.0.0-beta.39-x86_64.AppImage";
+  dimagentPath = "$HOME/OmniStudio/Applications/Extracted/DimAgent";
+
   motrix-wrapper = pkgs.writeShellScriptBin "motrix" ''
-    export LD_LIBRARY_PATH=${
-      pkgs.lib.makeLibraryPath [
-        pkgs.glib pkgs.gtk3 pkgs.qt5.qtbase pkgs.qt5.qtdeclarative pkgs.qt5.qtquickcontrols2 pkgs.SDL2
-        pkgs.libx11 pkgs.libxcursor pkgs.libxrandr
-        pkgs.libGL pkgs.libpulseaudio pkgs.pipewire pkgs.alsa-lib
-        pkgs.cups pkgs.dbus pkgs.fontconfig pkgs.freetype
-        pkgs.pango pkgs.cairo pkgs.gdk-pixbuf pkgs.openssl
-        pkgs.nspr pkgs.nss pkgs.at-spi2-core pkgs.at-spi2-atk
-        pkgs.harfbuzz pkgs.libdrm pkgs.libgbm pkgs.libuuid
-        pkgs.libsecret pkgs.wayland pkgs.zlib pkgs.stdenv.cc.cc.lib
-      ]
-    }:$LD_LIBRARY_PATH
-    exec ${pkgs.appimage-run}/bin/appimage-run $HOME/nixos-config/appimages/Motrix-2.0.0-beta.39-x86_64.AppImage "$@"
+    export LD_LIBRARY_PATH=${pkgs.lib.makeLibraryPath (commonLibs ++ [ pkgs.qt5.qtbase pkgs.qt5.qtdeclarative pkgs.qt5.qtquickcontrols2 pkgs.SDL2 ])}:$LD_LIBRARY_PATH
+    exec ${pkgs.appimage-run}/bin/appimage-run ${motrixPath} "$@"
   '';
 
-  # DimAgent wrapper（解压版 Electron 应用）
   dimagent-wrapper = pkgs.writeShellScriptBin "dimagent" ''
-    export LD_LIBRARY_PATH=$HOME/Applications/DimAgent:${
-      pkgs.lib.makeLibraryPath [
-        pkgs.alsa-lib pkgs.at-spi2-core pkgs.at-spi2-atk pkgs.cairo pkgs.cups
-        pkgs.dbus pkgs.expat pkgs.gdk-pixbuf pkgs.glib pkgs.glib-networking
-        pkgs.gtk3 pkgs.harfbuzz pkgs.atk pkgs.libxcb pkgs.libx11 pkgs.libXcomposite
-        pkgs.libXdamage pkgs.libXext pkgs.libXfixes pkgs.libxkbcommon pkgs.libXrandr
-        pkgs.libdrm pkgs.libgbm pkgs.libGL pkgs.libglvnd
-        pkgs.libuuid pkgs.libsecret pkgs.libnotify pkgs.libxinerama pkgs.libxrender
-        pkgs.mesa pkgs.nspr pkgs.nss pkgs.openssl
-        pkgs.pango pkgs.pipewire pkgs.libpulseaudio
-        pkgs.stdenv.cc.cc.lib pkgs.udev pkgs.wayland
-        pkgs.fontconfig pkgs.freetype pkgs.libxcursor pkgs.libxshmfence
-        pkgs.libusb1 pkgs.zlib pkgs.icu
-      ]
-    }:$LD_LIBRARY_PATH
-    cd $HOME/Applications/DimAgent
+    export LD_LIBRARY_PATH=${dimagentPath}:${pkgs.lib.makeLibraryPath commonLibs}:$LD_LIBRARY_PATH
+    cd ${dimagentPath}
     exec ./DimAgent "$@"
   '';
 in
@@ -56,13 +42,7 @@ in
   # Use latest kernel.
   boot.kernelPackages = pkgs.linuxPackages_latest;
 
-  networking.hostName = "nixos"; # Define your hostname.
-  # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
-
-  # Configure network proxy if necessary
-  # networking.proxy.default = "http://user:password@proxy:port/";
-  # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
-
+  networking.hostName = "nixos";
   # Enable networking
   networking.networkmanager.enable = true;
 
@@ -129,15 +109,7 @@ in
     alsa.enable = true;
     alsa.support32Bit = true;
     pulse.enable = true;
-    # If you want to use JACK applications, uncomment this
-    #jack.enable = true;
-
-    # Use the WirePlumber session manager
-    #wireplumber.enable = true;
   };
-
-  # Enable touchpad support (enabled default in most desktopManager).
-  # services.libinput.enable = true;
 
   # Flatpak
   services.flatpak.enable = true;
@@ -147,14 +119,9 @@ in
     isNormalUser = true;
     description = "Ron";
     extraGroups = [ "networkmanager" "wheel" ];
-    packages = with pkgs; [
-    #  thunderbird
-    ];
   };
 
-  # Install firefox.
   programs.firefox.enable = true;
-  # gh CLI 通过环境变量配置代理
 
   programs.clash-verge = {
     package = pkgs-unstable.clash-verge-rev;
@@ -227,52 +194,6 @@ in
     dimagent-wrapper
   ];
 
-  # You can use https://search.nixos.org/ to find more packages (and options).
-  #   vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
-  #   wget
-  # ];
-
-  # Some programs need SUID wrappers, can be configured further or are
-  # started in user sessions.
-  # programs.mtr.enable = true;
-  # programs.gnupg.agent = {
-  #   enable = true;
-  #   enableSSHSupport = true;
-  # };
-
-  # List services that you want to enable:
-
-  # Enable the OpenSSH daemon.
-  # services.openssh.enable = true;
-
-  # Open ports in the firewall.
-  # networking.firewall.allowedTCPPorts = [ ... ];
-  # networking.firewall.allowedUDPPorts = [ ... ];
-  # Or disable the firewall altogether.
-  # networking.firewall.enable = false;
-
-  # Copy the NixOS configuration file and link it from the resulting system
-  # (/run/current-system/configuration.nix). This is useful in case you
-  # accidentally delete configuration.nix.
-  # system.copySystemConfiguration = true;
-
-  # This option defines the first version of NixOS you have installed on this particular machine,
-  # and is used to maintain compatibility with application data (e.g. databases) created on older NixOS versions.
-  #
-  # Most users should NEVER change this value after the initial install, for any reason,
-  # even if you've upgraded your system to a new NixOS release.
-  #
-  # This value does NOT affect the Nixpkgs version your packages and OS are pulled from,
-  # so changing it will NOT upgrade your system - see https://nixos.org/manual/nixos/stable/#sec-upgrading for how
-  # to actually do that.
-  #
-  # This value being lower than the current NixOS release does NOT mean your system is
-  # out of date, out of support, or vulnerable.
-  #
-  # Do NOT change this value unless you have manually inspected all the changes it would make to your configuration,
-  # and migrated your data accordingly.
-  #
-  # For more information, see `man configuration.nix` or https://nixos.org/manual/nixos/stable/options#opt-system.stateVersion .
-  system.stateVersion = "26.05"; # Did you read the comment?
+  system.stateVersion = "26.05";
 
 }

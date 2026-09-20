@@ -24,8 +24,9 @@
     $DRY_RUN_CMD chmod -R u+w $HOME/.local/share/icons/hicolor/
     $DRY_RUN_CMD mkdir -p $HOME/.local/share/icons/hicolor/256x256/apps
     $DRY_RUN_CMD find /run/current-system/sw/share/icons/hicolor -name "firefox.png" -exec cp -L {} $HOME/.local/share/icons/hicolor/256x256/apps/ \; 2>/dev/null || true
-    $DRY_RUN_CMD find /run/current-system/sw/share/icons/hicolor -name "zen-twilight.png" -exec cp -L {} $HOME/.local/share/icons/hicolor/256x256/apps/ \; 2>/dev/null || true
-    $DRY_RUN_CMD ${pkgs.imagemagick}/bin/convert $HOME/.local/share/icons/hicolor/256x256/apps/zen-twilight.png -resize 256x256 $HOME/.local/share/icons/hicolor/256x256/apps/zen-twilight.png 2>/dev/null || true
+    $DRY_RUN_CMD cp -L /run/current-system/sw/share/icons/hicolor/128x128/apps/zen-twilight.png $HOME/.local/share/icons/hicolor/256x256/apps/zen-twilight.png 2>/dev/null || true
+    $DRY_RUN_CMD chmod u+w $HOME/.local/share/icons/hicolor/256x256/apps/zen-twilight.png 2>/dev/null || true
+    $DRY_RUN_CMD ${pkgs.imagemagick}/bin/magick $HOME/.local/share/icons/hicolor/256x256/apps/zen-twilight.png -resize 256x256 $HOME/.local/share/icons/hicolor/256x256/apps/zen-twilight.png 2>/dev/null || true
     $DRY_RUN_CMD find /run/current-system/sw/share/icons/hicolor -name "clash-verge.png" -exec cp -L {} $HOME/.local/share/icons/hicolor/256x256/apps/ \; 2>/dev/null || true
     $DRY_RUN_CMD cp -L /home/ron/.cache/appimage-run/52b7bcb1e7b146f5666279ac0da4e549d995135ded67bd1b9129add45fe90b14/usr/share/icons/hicolor/512x512/apps/qq.png $HOME/.local/share/icons/hicolor/256x256/apps/ 2>/dev/null || true
     $DRY_RUN_CMD cp -L /home/ron/.cache/appimage-run/f752967c69a45421a4b4536e88a4ee1400382a6b5d889c07c1ed8147eac87b32/usr/share/icons/hicolor/256x256/apps/motrix.png $HOME/.local/share/icons/hicolor/256x256/apps/motrix-appimage.png 2>/dev/null || true
