@@ -76,11 +76,11 @@
     },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1789542786,
-        "narHash": "sha256-BGtBoaZNpOPDEBLTiWNFdYppnDjGhwrUq5/P15QwrrM=",
-        "rev": "4c7870105e7f1fdf9c48688c8d7efc21abf0688a",
+        "lastModified": 1789749394,
+        "narHash": "sha256-egdV7mLwirrhbokzBuZ4j1XCjoD5ujwMO371/9z+PM4=",
+        "rev": "cf9d2fb3e50fa1cd5114c47505ea9177f7ff5f49",
         "type": "tarball",
-        "url": "https://releases.nixos.org/nixos/26.05/nixos-26.05.9904.4c7870105e7f/nixexprs.tar.xz"
+        "url": "https://releases.nixos.org/nixos/26.05/nixos-26.05.10057.cf9d2fb3e50f/nixexprs.tar.xz"
       },
       "original": {
         "type": "tarball",
@@ -89,8 +89,8 @@
     },
     "nixpkgs-unstable": {
       "locked": {
-        "lastModified": 1789546076,
-        "narHash": "sha256-zVxLZiSnmaaPLwnhj7pwmqe3axBg/C6nG5JZsJMh2g4=",
+        "lastModified": 1789785513,
+        "narHash": "sha256-B44WL6h0XoLjJ41bUPJk0X5SDinLCII//6EcBLXKiJ0=",
         "type": "tarball",
         "url": "https://gh-proxy.com/https://github.com/NixOS/nixpkgs/archive/nixos-unstable.tar.gz"
       },
@@ -131,8 +131,8 @@
         ]
       },
       "locked": {
-        "lastModified": 1789702344,
-        "narHash": "sha256-DfevaOxGu6NKUF+q5hUAg7kFscWQvuC9Yd/CgR4qpgc=",
+        "lastModified": 1789763453,
+        "narHash": "sha256-odKtnVD85ongiMfagtRXMdTQJoSmQHzmEBAH27QmFms=",
         "type": "tarball",
         "url": "https://gh-proxy.com/https://github.com/0xc000022070/zen-browser-flake/archive/main.tar.gz"
       },
