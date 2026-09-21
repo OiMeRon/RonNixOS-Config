@@ -201,4 +201,12 @@ in
     ${pkgs.gtk3}/bin/gtk-update-icon-cache -f /run/current-system/sw/share/icons/Adwaita/ 2>/dev/null || true
   '';
 
+  # 补 /bin/bash（NixOS 默认只有 /bin/sh），写法与上游 activationScripts.binsh 一致
+  system.activationScripts.binbash = ''
+    mkdir -p /bin
+    chmod 0755 /bin
+    ln -sfn ${pkgs.bashInteractive}/bin/bash /bin/.bash.tmp
+    mv /bin/.bash.tmp /bin/bash
+  '';
+
 }
