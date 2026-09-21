@@ -186,7 +186,7 @@
     Unit.Description = "Sync NixOS config to GitHub";
     Service = {
       Type = "oneshot";
-      ExecStart = "${pkgs.bash}/bin/bash -c 'cd /home/ron/nixos-config && ${pkgs.git}/bin/git add -A && (${pkgs.git}/bin/git diff --cached --quiet || (${pkgs.git}/bin/git commit -m \"auto: $(date +%Y-%m-%d_%H:%M)\" && ${pkgs.git}/bin/git push))'";
+      ExecStart = "${pkgs.bash}/bin/bash -c 'cd /home/ron/nixos-config && ${pkgs.git}/bin/git add -A && (${pkgs.git}/bin/git diff --cached --quiet || (${pkgs.git}/bin/git commit -m \"auto: $(date +%%Y-%%m-%%d_%%H:%%M)\" && ${pkgs.git}/bin/git push))'";
     };
   };
 
