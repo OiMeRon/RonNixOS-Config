@@ -66,6 +66,13 @@
       cursor-theme = "Adwaita";
     };
 
+    # 默认终端：GNOME 出厂值指向系统里不存在的 xdg-terminal-exec，
+    # 这里显式指到 Ghostty（-e 才是 Ghostty 的执行参数，不是 schema 默认的 --）
+    "org/gnome/desktop/default-applications/terminal" = {
+      exec = "ghostty";
+      exec-arg = "-e";
+    };
+
     # Rounded Window Corners Reborn 设置
     "org/gnome/shell/extensions/rounded-window-corners" = {
       corner-radius = 28;
