@@ -111,9 +111,6 @@ in
     pulse.enable = true;
   };
 
-  # Flatpak
-  services.flatpak.enable = true;
-
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users."ron" = {
     isNormalUser = true;
