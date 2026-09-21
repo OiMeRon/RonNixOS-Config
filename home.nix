@@ -192,9 +192,14 @@
 
   programs.git = {
     enable = true;
-    settings.user = {
-      name = "Ron";
-      email = "1757093971@qq.com";
+    settings = {
+      user = {
+        name = "Ron";
+        email = "1757093971@qq.com";
+      };
+      # git ≥2.37：没有上游跟踪时裸 git push 自动推到同名分支
+      # （防 filter-repo 类操作重加 remote 后丢 tracking，timer 再炸 exit 128）
+      push.autoSetupRemote = true;
     };
   };
 }
