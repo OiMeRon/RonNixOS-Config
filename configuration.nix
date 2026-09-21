@@ -170,6 +170,8 @@ in
     git
     deno
     ghostty
+    # GNOME 默认终端键(xdg-terminal-exec)的实现；具体挑哪个终端看 ~/.config/xdg-terminals.list
+    xdg-terminal-exec
     go
     godot
     helix

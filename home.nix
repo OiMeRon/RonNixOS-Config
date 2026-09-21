@@ -162,6 +162,12 @@
     };
   };
 
+  # xdg-terminal-exec 的终端优先级列表（一行一个 Desktop Entry ID，靠前的优先）
+  home.file.".config/xdg-terminals.list".text = ''
+    # 首选 Ghostty（GNOME 的默认终端键走的就是 xdg-terminal-exec）
+    com.mitchellh.ghostty.desktop
+  '';
+
   # 自动提交脚本
   home.file.".local/bin/git-sync" = {
     source = pkgs.writeShellScript "git-sync" ''
