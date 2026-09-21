@@ -93,10 +93,10 @@
       enable-desktop-menu-glass = true;
       enable-application-glass = false;
 
-      # Dock 设置（自适应效果）
-      dock-blur-radius = 15;
+      # Dock 设置
+      dock-blur-radius = 12;
       dock-corner-radius = 24;
-      dock-tint-strength = 0.15;
+      dock-tint-strength = 0.25;
       dock-brightness = 0.85;
       dock-tint-color = "#303030";
       dock-glass-expand = 1;
