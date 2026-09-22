@@ -131,8 +131,8 @@
         ]
       },
       "locked": {
-        "lastModified": 1789763453,
-        "narHash": "sha256-odKtnVD85ongiMfagtRXMdTQJoSmQHzmEBAH27QmFms=",
+        "lastModified": 1789962061,
+        "narHash": "sha256-gyzlqZi+R1cq/n/c6vh5Rz10M7QausR/O8v+YGAOyTA=",
         "type": "tarball",
         "url": "https://gh-proxy.com/https://github.com/0xc000022070/zen-browser-flake/archive/main.tar.gz"
       },

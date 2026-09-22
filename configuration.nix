@@ -185,7 +185,8 @@ in
     python3
     ruby
     rustup
-    superfile
+    # yazi（TUI 文件管理器）取代 superfile（2026-09-22 用户裁定）
+    yazi
     uv
     yarn
     zen-browser.packages.${pkgs.system}.twilight
