@@ -187,12 +187,26 @@ in
     rustup
     # yazi（TUI 文件管理器）取代 superfile（2026-09-22 用户裁定）
     yazi
+    # yazi 的预览/搜索配套（缺了预览会退化成占位符）
+    ffmpegthumbnailer  # 视频缩略图
+    # PDF 预览（pdftoppm）。注意：pkgs.poppler 只是 GLib 绑定库、poppler_min 也没有工具；
+    # 本 nixpkgs 里属性名是带连字符的 poppler-utils（旧名 poppler_utils 已重命名），Nix 里必须加引号
+    pkgs."poppler-utils"
+    chafa              # 终端内显示图片
+    fzf                # 模糊查找
+    zoxide             # 智能目录跳转
+    fd                 # 搜索（yazi 默认用 fd）
+    ripgrep            # 全文搜索
     uv
     yarn
     zen-browser.packages.${pkgs.system}.twilight
     gnome-tweaks
     gnome-icon-theme
     gnomeExtensions.rounded-window-corners-reborn
+    # PaperWM 148（= 50.0.1，shell-version 含 "50"）—— 可滚动平铺窗口管理
+    # 官方 README：Dash to Dock 属「Recommended extensions」；Rounded Window Corners
+    # 属「Incompatible extensions」（会改窗口形状 → 视觉 glitch，issue #763/#431）
+    gnomeExtensions.paperwm
     motrix-wrapper
     dimagent-wrapper
   ];
