@@ -123,6 +123,10 @@ in
 
   programs.firefox.enable = true;
 
+  # clash-verge-rev 暂时保留 —— 它是 127.0.0.1:7897 的提供者，而
+  # ~/.gitconfig 与 nix-daemon 都指着这个端口，GitHub 又直连不通（实测超时）。
+  # 删了它会断 git push / git-sync timer。等新客户端（FlClash / Hiddify）配好
+  # 并占住 7897 之后再单独一批退役（见 ~/.kimi-code/MEMORY.md 待裁决第 3 条）。
   programs.clash-verge = {
     package = pkgs-unstable.clash-verge-rev;
     enable = true;
@@ -130,7 +134,6 @@ in
     tunMode = true;
     autoStart = true;
   };
-
 
   programs.nix-ld = {
     enable = true;
@@ -172,6 +175,8 @@ in
     ghostty
     # GNOME 默认终端键(xdg-terminal-exec)的实现；具体挑哪个终端看 ~/.config/xdg-terminals.list
     xdg-terminal-exec
+    # 代理客户端（无 TUN；unstable 已于 2026-08-17 移除，26.05 冻结在 0.8.92）
+    flclash
     go
     godot
     helix

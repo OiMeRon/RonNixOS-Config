@@ -44,6 +44,7 @@
         ./modules/wechat.nix
         ./modules/gopeed.nix
         ./modules/cline.nix
+        ./modules/Hiddify.nix
         home-manager.nixosModules.home-manager
         {
           home-manager.useGlobalPkgs = true;
