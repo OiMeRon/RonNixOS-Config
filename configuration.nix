@@ -207,6 +207,9 @@ in
     # 官方 README：Dash to Dock 属「Recommended extensions」；Rounded Window Corners
     # 属「Incompatible extensions」（会改窗口形状 → 视觉 glitch，issue #763/#431）
     gnomeExtensions.paperwm
+    # Window Nativizer —— 给非原生窗口补 Adwaita 圆角/阴影/拉伸边框。
+    # 与 rounded-window-corners 同类，**不要同时启用**（重复绘制）。
+    gnomeExtensions.window-nativizer
     motrix-wrapper
     dimagent-wrapper
   ];

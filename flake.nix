@@ -46,6 +46,7 @@
         ./modules/cline.nix
         ./modules/Hiddify.nix
         ./modules/paperwm-zh.nix
+        ./modules/window-nativizer.nix
         home-manager.nixosModules.home-manager
         {
           home-manager.useGlobalPkgs = true;
