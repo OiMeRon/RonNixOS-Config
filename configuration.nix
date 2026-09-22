@@ -46,13 +46,11 @@ in
   # Enable networking
   networking.networkmanager.enable = true;
 
-  # Nix-daemon proxy settings
-  systemd.services.nix-daemon.environment = {
-    HTTP_PROXY = "http://127.0.0.1:7897";
-    HTTPS_PROXY = "http://127.0.0.1:7897";
-    ALL_PROXY = "socks://127.0.0.1:7897";
-  };
- 
+  # Nix-daemon 代理已移除（2026-09-22，随 clash-verge 退役）。
+  # 实测所有 nix 上游直连可达：cache.nixos.org 0.55s / channels.nixos.org 0.91s /
+  # mirrors.ustc.edu.cn 0.32s —— 不再需要 127.0.0.1:7897。
+  # 若将来某上游不通，在这里恢复这三行即可。
+
   # Set your time zone.
   time.timeZone = "Asia/Shanghai";
 
@@ -123,17 +121,14 @@ in
 
   programs.firefox.enable = true;
 
-  # clash-verge-rev 暂时保留 —— 它是 127.0.0.1:7897 的提供者，而
-  # ~/.gitconfig 与 nix-daemon 都指着这个端口，GitHub 又直连不通（实测超时）。
-  # 删了它会断 git push / git-sync timer。等新客户端（FlClash / Hiddify）配好
-  # 并占住 7897 之后再单独一批退役（见 ~/.kimi-code/MEMORY.md 待裁决第 3 条）。
-  programs.clash-verge = {
-    package = pkgs-unstable.clash-verge-rev;
-    enable = true;
-    serviceMode = true;
-    tunMode = true;
-    autoStart = true;
-  };
+  # clash-verge-rev 于 2026-09-22 退役（用户裁定，省 ~804 MB）。
+  # 退役前提已验证：
+  #   ① git push 改走 SSH-443（~/.ssh/config 把 github.com 映射到 ssh.github.com:443），
+  #      实测真实 push 成功 → 不再依赖 127.0.0.1:7897
+  #   ② nix 的上游全部直连可达（cache.nixos.org / channels.nixos.org / USTC / gh-proxy 实测均 200）
+  #      → nix-daemon 的代理三行也已移除
+  #   ③ 被墙的只有 github.com 这一个域名；HTTPS clone 可走 gh-proxy 前缀
+  # 日常代理改用 FlClash（nixpkgs，无 TUN）+ Hiddify（modules/Hiddify.nix，带 TUN capability）。
 
   programs.nix-ld = {
     enable = true;
