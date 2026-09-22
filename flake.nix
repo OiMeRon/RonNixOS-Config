@@ -47,6 +47,7 @@
         ./modules/Hiddify.nix
         ./modules/paperwm-zh.nix
         ./modules/window-nativizer.nix
+        ./modules/herdr.nix
         home-manager.nixosModules.home-manager
         {
           home-manager.useGlobalPkgs = true;

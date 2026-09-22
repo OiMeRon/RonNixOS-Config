@@ -36,7 +36,10 @@ in
     (final: prev:
       let
         src = final.fetchurl {
+          # ghfast.top 在前：gh-proxy.com 在无代理环境下会卡死（安装错误总结 §22.8）。
+          # 该包只有 79KB，当初 gh-proxy 侥幸下完了；换成大文件必挂。
           urls = [
+            "https://ghfast.top/${directUrl}"
             "https://gh-proxy.com/${directUrl}"
             directUrl
           ];
