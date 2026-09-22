@@ -45,6 +45,7 @@
         ./modules/gopeed.nix
         ./modules/cline.nix
         ./modules/Hiddify.nix
+        ./modules/paperwm-zh.nix
         home-manager.nixosModules.home-manager
         {
           home-manager.useGlobalPkgs = true;
