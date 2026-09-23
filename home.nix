@@ -168,6 +168,25 @@
     com.mitchellh.ghostty.desktop
   '';
 
+  # Ghostty 自定义着色器：Liquid Ghost
+  # 跟随光标的液态玻璃镜头（欠阻尼弹簧物理 / 移动拉伸 / 涟漪 / 边缘色散）
+  # 来源：https://gist.github.com/whexy/b6e1b76d69b31349358a8c376788d7ae
+  # 着色器原件 sha256: 4d79b6830d9d6ed72b3d6e19c50c6c3eaa687d207d64e3ef496ff54d89777361
+  #
+  # 文件名必须是 config.ghostty：Ghostty 1.3 的正式名（源码 Config.zig
+  # loadDefaultFiles：先加载旧名 `config`，再加载 `config.ghostty`；
+  # 两个同时存在会告警）。只写这一个，不要同时建 `config`。
+  #
+  # 它用到的 uniform 已逐个核对存在于 Ghostty 的 shadertoy_prefix.glsl：
+  # iResolution / iTime / iCurrentCursor / iPreviousCursor / iCursorColor /
+  # iFocus / iTimeCursorChange / iTimeFocus / iChannel0
+  #
+  # 相关设置 custom-shader-animation 默认 true：focused 终端会跑动画循环，
+  # 上游注释称 CPU 增加一般不到 10%。想省电可设 false（但着色器就不动了）。
+  home.file.".config/ghostty/config.ghostty".text = ''
+    custom-shader = ${./shaders/liquid-ghost.glsl}
+  '';
+
   # 自动提交脚本
   home.file.".local/bin/git-sync" = {
     source = pkgs.writeShellScript "git-sync" ''
