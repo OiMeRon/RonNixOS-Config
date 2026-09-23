@@ -204,7 +204,7 @@
   # 素材本体放在 ~/Data/apps/shaders/（照 ~/Data/apps/icons/gopeed.svg 的形状：
   # 被 Nix 声明引用的、放在 store 外的素材）。仓库里不再存副本。
   # 这里写绝对路径而不是 $HOME —— 配置文件没有 shell 去展开变量。
-  # sha256: 4d79b6830d9d6ed72b3d6e19c50c6c3eaa687d207d64e3ef496ff54d89777361
+  # sha256: 94eacc7b5aa7377d790bb90643ab4a930b773f957ee31ad3b11504b539f3d195
   #
   # 文件名必须是 config.ghostty：Ghostty 1.3 的正式名（源码 Config.zig
   # loadDefaultFiles：先加载旧名 `config`，再加载 `config.ghostty`；
@@ -294,7 +294,7 @@
     Unit.Description = "Auto-sync Obsidian vault to GitHub";
     Timer = {
       OnBootSec = "5min";
-      OnUnitActiveSec = "30min";
+      OnUnitActiveSec = "60min";
     };
     Install.WantedBy = [ "timers.target" ];
   };
