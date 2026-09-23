@@ -46,8 +46,8 @@
         ./modules/cline.nix
         ./modules/Hiddify.nix
         ./modules/paperwm-zh.nix
-        ./modules/window-nativizer.nix
         ./modules/herdr.nix
+        ./modules/multica.nix
         home-manager.nixosModules.home-manager
         {
           home-manager.useGlobalPkgs = true;

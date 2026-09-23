@@ -12,8 +12,7 @@
 #      代理（见 ~/Data/文档/安装错误总结.md §22），源码构建的网络风险大得多
 #   3. 单二进制、无 Electron，本来就是上游推荐的安装形态
 #
-# 网络注意：和 window-nativizer.nix 同款处理 —— 镜像在前、直连兜底。
-#   但**镜像要挑**：实测 gh-proxy.com 在无代理环境下会卡死（见安装错误总结 §22.8），
+# 网络注意：镜像要挑 —— gh-proxy.com 在无代理环境下会卡死（安装错误总结 §22.8），
 #   ghfast.top 才正常。字节一致，hash 通用。
 #
 # ⚠ 不要用 `herdr update` / `herdr channel set` 自更新：
@@ -71,9 +70,10 @@ let
       # 补全脚本离线生成（实测无副作用：不建目录、不连后台服务）。
       # 构建沙箱里 $HOME 未必有定义，显式给一个。
       export HOME=$TMPDIR
-      # 注意：installShellCompletion 直接用**输入文件名**当安装名，
-      # 而 bash 只认「文件名 == 命令名」的补全文件 —— 所以这里不能叫 herdr.bash，
-      # 必须叫 herdr，否则补全不生效（实测踩到过）。
+      # 更正：这里一度写成「bash 只认文件名 == 命令名」—— **那是错的**。
+      # bash-completion 的 _comp_load 同时找 `<cmd>` 和 `<cmd>.bash`
+      # （源码 bash_completion 第 3459 行），实测两种命名都能注册补全。
+      # 所以 installShellCompletion 的 --cmd 形式也是对的；这里保留显式文件名只为直观。
       $out/bin/herdr completion bash > herdr
       $out/bin/herdr completion zsh  > _herdr
       $out/bin/herdr completion fish > herdr.fish
