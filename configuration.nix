@@ -176,6 +176,8 @@ in
     godot
     helix
     nodejs
+    # 终端 AI 编码代理（nixpkgs 26.05 官方包）
+    opencode
     obs-studio
     openjdk
     php
