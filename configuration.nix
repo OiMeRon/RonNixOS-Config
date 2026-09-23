@@ -176,8 +176,8 @@ in
     godot
     helix
     nodejs
-    # 终端 AI 编码代理（nixpkgs 26.05 官方包）
-    opencode
+    # 终端 AI 编码代理。26.05 稳定版冻结在 1.15.10 太旧，改走 nixpkgs-unstable（2026-09-23）
+    pkgs-unstable.opencode
     obs-studio
     openjdk
     php

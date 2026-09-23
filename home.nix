@@ -185,6 +185,12 @@
   home.file.".clinerules/03-machine-memory.md".source =
     config.lib.file.mkOutOfStoreSymlink "/home/ron/nixos-config/MEMORY.md";
 
+  # opencode 全局配置：源在仓库，软链到 ~/.config/opencode/（同上，mkOutOfStoreSymlink
+  # 指向仓库工作区，配置可写、受 git 管）。同目录的 package.json/node_modules/
+  # .gitignore 由 opencode 自己管理（插件安装），不动。
+  home.file.".config/opencode/opencode.jsonc".source =
+    config.lib.file.mkOutOfStoreSymlink "/home/ron/nixos-config/opencode.jsonc";
+
   # xdg-terminal-exec 的终端优先级列表（一行一个 Desktop Entry ID，靠前的优先）
   home.file.".config/xdg-terminals.list".text = ''
     # 首选 Ghostty（GNOME 的默认终端键走的就是 xdg-terminal-exec）
