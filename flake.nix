@@ -44,7 +44,6 @@
         ./modules/wechat.nix
         ./modules/gopeed.nix
         ./modules/cline.nix
-        ./modules/Hiddify.nix
         ./modules/paperwm-zh.nix
         ./modules/herdr.nix
         ./modules/multica.nix

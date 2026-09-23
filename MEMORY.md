@@ -91,8 +91,8 @@
 | 1 | dconf 默认终端 → `ghostty` / `-e` | `home.nix` |
 | 2 | 加 `xdg-terminal-exec` 包 | `configuration.nix` |
 | 3 | `~/.config/xdg-terminals.list` 首选 Ghostty | `home.nix` |
-| 4 | 新增 Hiddify 模块（AppImage + capability TUN） | `modules/Hiddify.nix`（新文件） |
-| 5 | 注册 Hiddify 模块 | `flake.nix` |
+| 4 | 新增 Hiddify 模块（AppImage + capability TUN）→ **2026-09-24 已删** | `modules/Hiddify.nix` |
+| 5 | 注册 Hiddify 模块 → **2026-09-24 已移除注册** | `flake.nix` |
 | 6 | 加 `flclash` 包 | `configuration.nix` |
 | 7 | **删 `programs.clash-verge`**（退役） | `configuration.nix` |
 | 8 | **删 nix-daemon 代理三行**（不再需要 7897） | `configuration.nix` |
@@ -124,7 +124,7 @@
   - **Linux TUN 提权三者都有坑**：FlClash 的 Rust helper 要往 `/etc/systemd/system` 写 unit（本机该路径 → `/nix/store`，**只读，装不了**）；Clash Mi 无 Linux helper；nixpkgs 的 flclash 包不构建 helper
   - `flclash` 在 nixpkgs-unstable **已于 2026-08-17 移除**（`aliases.nix:858`，"low number of users and lack of maintenance"），26.05 冻结在 0.8.92
   - Hiddify 最新发版 **2026-03-05**（6.5 个月前），许可证为 GPL-3.0 + 7 条附加条款（含禁止商用）
-- **用户裁定（2026-09-22）：选 Hiddify** —— 待办：实测 AppImage 能否在本机跑起来（预期踩 `libayatana-appindicator3` + `libepoxy`，见安装错误总结 §13.3），再决定是否写 `modules/hiddify.nix`
+- ~~**用户裁定（2026-09-22）：选 Hiddify**~~ → **（2026-09-24）删除 `modules/Hiddify.nix`**：AppImage 三层 RPATH 链路（主二进制 / 插件 DT_RUNPATH / AT_SECURE）修了一版仍不够脆，用户裁定直接删；日常代理只留 FlClash（无 TUN）。踩坑记录保留在 `安装错误总结.md` §13/§19
 
 ## ⚠️ 待裁决 / 待更新
 
