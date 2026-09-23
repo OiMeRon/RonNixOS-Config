@@ -124,7 +124,8 @@
   - **Linux TUN 提权三者都有坑**：FlClash 的 Rust helper 要往 `/etc/systemd/system` 写 unit（本机该路径 → `/nix/store`，**只读，装不了**）；Clash Mi 无 Linux helper；nixpkgs 的 flclash 包不构建 helper
   - `flclash` 在 nixpkgs-unstable **已于 2026-08-17 移除**（`aliases.nix:858`，"low number of users and lack of maintenance"），26.05 冻结在 0.8.92
   - Hiddify 最新发版 **2026-03-05**（6.5 个月前），许可证为 GPL-3.0 + 7 条附加条款（含禁止商用）
-- ~~**用户裁定（2026-09-22）：选 Hiddify**~~ → **（2026-09-24）删除 `modules/Hiddify.nix`**：AppImage 三层 RPATH 链路（主二进制 / 插件 DT_RUNPATH / AT_SECURE）修了一版仍不够脆，用户裁定直接删；日常代理只留 FlClash（无 TUN）。踩坑记录保留在 `安装错误总结.md` §13/§19
+- ~~**用户裁定（2026-09-22）：选 Hiddify**~~ → **（2026-09-24）删除 `modules/Hiddify.nix`**：AppImage 三层 RPATH 链路（主二进制 / 插件 DT_RUNPATH / AT_SECURE）修了一版仍不够脆，用户裁定直接删。踩坑记录保留在 `安装错误总结.md` §13/§19
+- **（2026-09-24）Clash Mi 声明式装入**（`modules/clashmi.nix`，模式 A）：本体 `Extracted/clashmi/`（1.0.30.1605，AppImage 解压），wrapper + desktop + 图标进 system profile；无 Linux TUN helper → 纯 `LD_LIBRARY_PATH`（比 gopeed 多 `libgcrypt`）。nixpkgs 的 `clashmi` 已于 2026-01-31 移除（unmaintained）。与 FlClash 共存
 
 ## ⚠️ 待裁决 / 待更新
 

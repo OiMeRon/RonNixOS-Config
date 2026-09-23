@@ -43,6 +43,7 @@
         ./modules/qq.nix
         ./modules/wechat.nix
         ./modules/gopeed.nix
+        ./modules/clashmi.nix
         ./modules/cline.nix
         ./modules/paperwm-zh.nix
         ./modules/herdr.nix

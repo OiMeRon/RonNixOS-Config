@@ -128,7 +128,8 @@ in
   #   ② nix 的上游全部直连可达（cache.nixos.org / channels.nixos.org / USTC / gh-proxy 实测均 200）
   #      → nix-daemon 的代理三行也已移除
   #   ③ 被墙的只有 github.com 这一个域名；HTTPS clone 可走 gh-proxy 前缀
-  # 日常代理改用 FlClash（nixpkgs，无 TUN）。Hiddify 已于 2026-09-24 删除（AppImage RPATH 链路太脆）。
+  # 日常代理：FlClash（nixpkgs）+ Clash Mi（modules/clashmi.nix，模式 A，无 TUN）。
+  # Hiddify 已于 2026-09-24 删除（AppImage RPATH 链路太脆）。
 
   programs.nix-ld = {
     enable = true;
