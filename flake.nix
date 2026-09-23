@@ -48,6 +48,7 @@
         ./modules/paperwm-zh.nix
         ./modules/herdr.nix
         ./modules/multica.nix
+        ./modules/user-file-structure.nix
         home-manager.nixosModules.home-manager
         {
           home-manager.useGlobalPkgs = true;

@@ -4,8 +4,21 @@
 
 let
   gopeedWrapper = pkgs.writeShellScriptBin "gopeed" ''
-    # 指向 appimage-run 已解压的目录
-    APPDIR=/home/ron/.cache/appimage-run/cc641ec5d2350e38cd4b955412ab0e0355ac01931e6b082404beef464d6f946c
+    # 2026-09-23 修正：原来这里写死 ~/.cache/appimage-run/<hash>/ ——
+    # 那是 appimage-run 的**缓存**目录，被清掉（清理工具 / 重装系统 /
+    # 手动删 ~/.cache）gopeed 就直接废。现在本体放 Applications/Extracted/gopeed/
+    # （稳定路径），符合 ~/OmniStudio/DIRECTORY.md「Extracted/ = 解压版软件」。
+    # 迁移时把原缓存目录整体复制过来，所以下载记录/设置没丢。
+    APPDIR="$HOME/OmniStudio/Applications/Extracted/gopeed"
+
+    if [ ! -x "$APPDIR/gopeed" ]; then
+      echo "gopeed: 找不到本体 $APPDIR/gopeed" >&2
+      echo "  从 AppImage 重新解压：" >&2
+      echo "    cd ~/OmniStudio/Applications/AppImage" >&2
+      echo "    ./Gopeed-v1.9.3-linux-amd64.AppImage --appimage-extract" >&2
+      echo "    mv squashfs-root ~/OmniStudio/Applications/Extracted/gopeed" >&2
+      exit 127
+    fi
 
     export LD_LIBRARY_PATH="$APPDIR/lib:$APPDIR/usr/lib:${
       pkgs.lib.makeLibraryPath [

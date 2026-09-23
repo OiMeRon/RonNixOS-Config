@@ -1,4 +1,4 @@
-{ appimage-install, pkgs, ... }:
+{ appimage-install, pkgs, lib, config, ... }:
 
 {
   home.username = "ron";
@@ -162,6 +162,29 @@
     };
   };
 
+  # ── agent 文档：源在仓库，各 agent 的读取路径做软链接 ──────────────
+  # 7 个入口全部指向同一份源，不存在副本。
+  #
+  # 用 mkOutOfStoreSymlink 指向**仓库工作区**，不是 store —— 这是关键：
+  # 文档要保持可写（MEMORY.md / NIXOS-OPS.md 由 agent 持续更新），
+  # 又要受 git 版本控制。普通的 home.file.<path>.source 会把内容复制进
+  # store 变成只读，那会直接打断 agent 更新记忆的流程。
+  # 代价：改文档改的是仓库里那份，要 rebuild 才生效（软链接本身由 Nix 管）。
+  home.file.".kimi-code/AGENTS.md".source =
+    config.lib.file.mkOutOfStoreSymlink "/home/ron/nixos-config/AGENTS.md";
+  home.file.".kimi-code/MEMORY.md".source =
+    config.lib.file.mkOutOfStoreSymlink "/home/ron/nixos-config/MEMORY.md";
+  home.file.".kimi-code/NIXOS-OPS.md".source =
+    config.lib.file.mkOutOfStoreSymlink "/home/ron/nixos-config/NIXOS-OPS.md";
+  home.file."AGENTS.md".source =
+    config.lib.file.mkOutOfStoreSymlink "/home/ron/nixos-config/AGENTS.md";
+  home.file.".clinerules/01-nixos-redlines.md".source =
+    config.lib.file.mkOutOfStoreSymlink "/home/ron/nixos-config/AGENTS.md";
+  home.file.".clinerules/02-nixos-ops.md".source =
+    config.lib.file.mkOutOfStoreSymlink "/home/ron/nixos-config/NIXOS-OPS.md";
+  home.file.".clinerules/03-machine-memory.md".source =
+    config.lib.file.mkOutOfStoreSymlink "/home/ron/nixos-config/MEMORY.md";
+
   # xdg-terminal-exec 的终端优先级列表（一行一个 Desktop Entry ID，靠前的优先）
   home.file.".config/xdg-terminals.list".text = ''
     # 首选 Ghostty（GNOME 的默认终端键走的就是 xdg-terminal-exec）
@@ -171,7 +194,11 @@
   # Ghostty 自定义着色器：Liquid Ghost
   # 跟随光标的液态玻璃镜头（欠阻尼弹簧物理 / 移动拉伸 / 涟漪 / 边缘色散）
   # 来源：https://gist.github.com/whexy/b6e1b76d69b31349358a8c376788d7ae
-  # 着色器原件 sha256: 4d79b6830d9d6ed72b3d6e19c50c6c3eaa687d207d64e3ef496ff54d89777361
+  #
+  # 素材本体放在 ~/Data/apps/shaders/（照 ~/Data/apps/icons/gopeed.svg 的形状：
+  # 被 Nix 声明引用的、放在 store 外的素材）。仓库里不再存副本。
+  # 这里写绝对路径而不是 $HOME —— 配置文件没有 shell 去展开变量。
+  # sha256: 4d79b6830d9d6ed72b3d6e19c50c6c3eaa687d207d64e3ef496ff54d89777361
   #
   # 文件名必须是 config.ghostty：Ghostty 1.3 的正式名（源码 Config.zig
   # loadDefaultFiles：先加载旧名 `config`，再加载 `config.ghostty`；
@@ -184,7 +211,24 @@
   # 相关设置 custom-shader-animation 默认 true：focused 终端会跑动画循环，
   # 上游注释称 CPU 增加一般不到 10%。想省电可设 false（但着色器就不动了）。
   home.file.".config/ghostty/config.ghostty".text = ''
-    custom-shader = ${./shaders/liquid-ghost.glsl}
+    custom-shader = /home/ron/Data/apps/shaders/liquid-ghost.glsl
+  '';
+
+  # 模式 A 的软件（本体在 ~/OmniStudio/Applications/，不在 store）没法在构建时
+  # 生成补全脚本 —— Nix 沙箱读不到 $HOME。改在这里跑：每次 switch 重新生成一次。
+  # 只生成 bash 的（本机 shell 是 bash）；用 zsh/fish 的话再加对应分支。
+  home.activation.shellCompletions = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+    compdir="$HOME/.local/share/bash-completion/completions"
+    mkdir -p "$compdir"
+    for spec in \
+      "$HOME/OmniStudio/Applications/Extracted/herdr/herdr herdr" \
+      "$HOME/OmniStudio/Applications/Extracted/multica/multica multica"
+    do
+      set -- $spec
+      if [ -x "$1" ]; then
+        "$1" completion bash > "$compdir/$2" 2>/dev/null || true
+      fi
+    done
   '';
 
   # 自动提交脚本
