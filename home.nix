@@ -272,6 +272,40 @@
     };
   };
 
+  # Obsidian vault 同步
+  home.file.".local/bin/vault-sync" = {
+    source = pkgs.writeShellScript "vault-sync" ''
+      #!/usr/bin/env bash
+      set -e
+      cd ~/Data/文档/ObsidianVault
+      git add -A
+      if git diff --cached --quiet; then
+        echo "无变更"
+      else
+        git commit -m "vault backup: $(date '+%Y-%m-%d %H:%M:%S')"
+        git push
+        echo "已提交并推送"
+      fi
+    '';
+    executable = true;
+  };
+
+  systemd.user.timers.vault-sync = {
+    Unit.Description = "Auto-sync Obsidian vault to GitHub";
+    Timer = {
+      OnBootSec = "5min";
+      OnUnitActiveSec = "30min";
+    };
+    Install.WantedBy = [ "timers.target" ];
+  };
+  systemd.user.services.vault-sync = {
+    Unit.Description = "Sync Obsidian vault to GitHub";
+    Service = {
+      Type = "oneshot";
+      ExecStart = "${pkgs.bash}/bin/bash -c 'cd /home/ron/Data/文档/ObsidianVault && ${pkgs.git}/bin/git add -A && (${pkgs.git}/bin/git diff --cached --quiet || (${pkgs.git}/bin/git commit -m \"vault backup: $(date +%%Y-%%m-%%d_%%H:%%M)\" && ${pkgs.git}/bin/git push))'";
+    };
+  };
+
   programs.git = {
     enable = true;
     settings = {
