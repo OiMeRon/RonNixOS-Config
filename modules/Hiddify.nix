@@ -3,7 +3,7 @@
 # 依赖：programs.nix-ld.enable = true
 #   AppImage 内二进制的 ELF 解释器是 /lib64/ld-linux-x86-64.so.2；
 #   该路径在 NixOS 上由 nix-ld 提供软链（实测 /lib64/ld-linux-x86-64.so.2 -> nix-ld）。
-#   没有 nix-ld 这些二进制根本无法启动；但库仍需 LD_LIBRARY_PATH 提供
+#   没有 nix-ld 这些二进制根本无法启动；但库仍需 LD_LIBRARY_PATH / RPATH 提供
 #   （裸跑实测报 libgtk-3.so.0 找不到）。文件末尾有 assertion 守住这个前提。
 #
 # TUN 模式（capability 方案）：
@@ -13,8 +13,14 @@
 #   与 programs.clash-verge 的 tunMode 同款做法（security.wrappers）。
 #   注意：该方案下 DNS 设置受限（同 clash 模块 tunMode 的注解）。
 #
+# capability → AT_SECURE → LD_LIBRARY_PATH 失效（2026-09-24 实测）：
+#   带 file capability 的进程 glibc 忽略环境里的 LD_LIBRARY_PATH，只认二进制
+#   自身 RPATH/RUNPATH。AppImage 原生 RUNPATH 仅 $ORIGIN/lib，故 wrapper
+#   链路必报 libgtk not found。修法：构建期 patchelf 把完整库路径烤进 RPATH
+#   （RPATH 在 AT_SECURE 下仍生效），wrapper 指向 patch 后的副本。
+#
 # 未用 appimage-run：其 FHS 环境缺 libepoxy（实测 appimage-run 直接跑报
-#   libepoxy.so.0 找不到），故走「解压 + 完整 LD_LIBRARY_PATH」。
+#   libepoxy.so.0 找不到），故走「解压 + patchelf RPATH（+ 启动器 LD_LIBRARY_PATH）」。
 #   详见 ~/Data/文档/安装错误总结.md §13 / §19。
 
 { config, lib, pkgs, ... }:
@@ -37,17 +43,35 @@ let
   # GTK/Flutter 需要的全部要从系统来。
   # 用 lib.makeLibraryPath（内部走 getLib），多输出包如 brotli 会自动取 lib 输出
   # —— 见安装错误总结 §19.2。
+  # libayatana-indicator：主二进制直接 NEEDED libayatana-indicator3.so.7，
+  #   仅靠 libayatana-appindicator 的传播在 LD_LIBRARY_PATH 下搜不到（§19 补）。
   runtimeLibs = with pkgs; [
     libepoxy brotli gtk3 gdk-pixbuf glib glib-networking pango cairo atk harfbuzz
     fontconfig freetype libpng libjpeg zlib libffi pcre2 libthai libdatrie libselinux
-    libxkbcommon wayland mesa libglvnd libsecret keybinder3 libayatana-appindicator
+    libxkbcommon wayland mesa libglvnd libsecret keybinder3
+    libayatana-appindicator libayatana-indicator
     libsoup_3 at-spi2-core dbus cups alsa-lib libpulseaudio json-glib libxml2
     libgcrypt libgpg-error libx11 libxcb libXext libXfixes libXrandr libXrender
     libXinerama libXi libXtst libxcursor libXdamage libXcomposite libxshmfence
     libdrm libgbm expat libuuid udev nspr nss openssl icu
   ];
 
-  # 启动器：设库路径 → 转到带 capability 的 wrapper（/run/wrappers/bin/hiddify-app）
+  # 完整库搜索路径：AppImage 自带 + 系统运行期
+  libraryPath = "${appimage}/lib:${appimage}/usr/lib:${
+    pkgs.lib.makeLibraryPath runtimeLibs
+  }";
+
+  # capability wrapper 用的副本：RPATH 烤进二进制（AT_SECURE 下 LD_LIBRARY_PATH 无效）
+  hiddifyPatched = pkgs.runCommand "hiddify-bin" {
+    nativeBuildInputs = [ pkgs.patchelf ];
+  } ''
+    cp ${appimage}/hiddify $out
+    chmod 755 $out
+    patchelf --set-rpath "${libraryPath}" $out
+  '';
+
+  # 启动器：设库路径（直接调用/调试用）→ 转到带 capability 的 wrapper
+  # （wrapper 下靠 hiddifyPatched 的 RPATH 找库，不依赖这里的 LD_LIBRARY_PATH）
   hiddify = pkgs.writeShellScriptBin "hiddify" ''
     APPDIR=${appimage}
     export LD_LIBRARY_PATH="$APPDIR/lib:$APPDIR/usr/lib:${
@@ -113,11 +137,12 @@ in
   # TUN 提权：给整个 app 二进制加网络能力
   # （内核 libbox 跑在进程内，无法单独授权；与 clash-verge 的 tunMode 同款）
   # 命名 hiddify-app 以免与启动器脚本 hiddify 在 PATH 上撞名
+  # source 必须是 patchelf 后的副本：AT_SECURE 下原版只有 $ORIGIN/lib，缺系统库
   security.wrappers.hiddify-app = {
     owner = "root";
     group = "root";
     capabilities = "cap_net_bind_service,cap_net_raw,cap_net_admin=+ep";
-    source = "${appimage}/hiddify";
+    source = hiddifyPatched;
   };
 
   environment.systemPackages = [
