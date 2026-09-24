@@ -195,6 +195,7 @@ in
     pkgs."poppler-utils"
     chafa              # 终端内显示图片
     fzf                # 模糊查找
+    fastfetch
     zoxide             # 智能目录跳转
     fd                 # 搜索（yazi 默认用 fd）
     ripgrep            # 全文搜索
