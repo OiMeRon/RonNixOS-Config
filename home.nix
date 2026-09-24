@@ -44,8 +44,25 @@
       Icon=obsidian
       MimeType=x-scheme-handler/obsidian
       Name=Obsidian
-      StartupWMClass=obsidian
+      StartupWMClass=md.Obsidian
       StartupNotify=true
+      Type=Application
+      Version=1.5
+    '';
+  };
+
+  home.file.".local/share/applications/flclash.desktop" = {
+    text = ''
+      [Desktop Entry]
+      Categories=Network
+      Exec=FlClash %U
+      GenericName=FlClash
+      Icon=flclash
+      Keywords=FlClash;Clash;ClashMeta;Proxy
+      Name=FlClash
+      StartupNotify=true
+      StartupWMClass=com.follow.clash
+      Terminal=false
       Type=Application
       Version=1.5
     '';
