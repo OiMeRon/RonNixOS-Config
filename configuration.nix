@@ -172,7 +172,7 @@ in
     # GNOME 默认终端键(xdg-terminal-exec)的实现；具体挑哪个终端看 ~/.config/xdg-terminals.list
     xdg-terminal-exec
     go
-    godot
+    pkgs-unstable.godot
     helix
     nodejs
     # 终端 AI 编码代理。26.05 稳定版冻结在 1.15.10 太旧，改走 nixpkgs-unstable（2026-09-23）
