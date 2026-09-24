@@ -1,7 +1,7 @@
 # Clash Mi — 开源代理客户端（mihomo 内核，Flutter 壳）
 #
 # 上游：https://github.com/KaringX/clashmi  ·  官网 https://clashmi.app（其余域名均为仿冒）
-# 定位：与 FlClash 共存的轻量代理 GUI；无 Linux TUN helper → 不需要 capability/wrapper，
+# 定位：本机唯一代理客户端；无 Linux TUN helper → 不需要 capability/wrapper，
 #       纯 LD_LIBRARY_PATH 即可（与 Hiddify 的 AT_SECURE/RPATH 三层坑不同）。
 #
 # ── 安装模式：模式 A（解压版）──────────────────────────────────────

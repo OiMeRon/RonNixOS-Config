@@ -51,23 +51,6 @@
     '';
   };
 
-  home.file.".local/share/applications/flclash.desktop" = {
-    text = ''
-      [Desktop Entry]
-      Categories=Network
-      Exec=FlClash %U
-      GenericName=FlClash
-      Icon=flclash
-      Keywords=FlClash;Clash;ClashMeta;Proxy
-      Name=FlClash
-      StartupNotify=true
-      StartupWMClass=com.follow.clash
-      Terminal=false
-      Type=Application
-      Version=1.5
-    '';
-  };
-
   # Motrix 桌面文件（由 AppImage 自带，无需声明）
 
   programs.bash.enable = true;

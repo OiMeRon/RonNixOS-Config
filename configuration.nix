@@ -128,8 +128,8 @@ in
   #   ② nix 的上游全部直连可达（cache.nixos.org / channels.nixos.org / USTC / gh-proxy 实测均 200）
   #      → nix-daemon 的代理三行也已移除
   #   ③ 被墙的只有 github.com 这一个域名；HTTPS clone 可走 gh-proxy 前缀
-  # 日常代理：FlClash（nixpkgs）+ Clash Mi（modules/clashmi.nix，模式 A，无 TUN）。
-  # Hiddify 已于 2026-09-24 删除（AppImage RPATH 链路太脆）。
+  # Proxy client: Clash Mi only (modules/clashmi.nix, no TUN).
+  # Hiddify removed 2026-09-24 (fragile AppImage RPATH).
 
   programs.nix-ld = {
     enable = true;
@@ -171,8 +171,6 @@ in
     ghostty
     # GNOME 默认终端键(xdg-terminal-exec)的实现；具体挑哪个终端看 ~/.config/xdg-terminals.list
     xdg-terminal-exec
-    # 代理客户端（无 TUN；unstable 已于 2026-08-17 移除，26.05 冻结在 0.8.92）
-    flclash
     go
     godot
     helix
