@@ -15,7 +15,7 @@
 
 ## 重要规则
 
-- **安装软件前必须读取**：`~/Data/文档/安装错误总结.md`（最后更新 2026-09-21，18 节）
+- **安装软件前必须读取**：`~/Data/文档/安装错误总结.md`（最后更新 2026-09-24，23 节）
 - **安装后发现新错误必须追加**：写入同一文档，保持更新
 - **所有软件安装必须声明式**：含 AppImage、外部下载的软件；配置写入 `configuration.nix` 或 `home.nix`
 - **不用 Flatpak（已裁定 2026-09-21 17:2x）**：用户批准彻底退出 flatpak。`services.flatpak.enable` 3 行声明已从 `configuration.nix` 移除并在 **Gen 138**（17:25:36）生效；`flatpak` 命令已从 PATH 消失。**剩余 = 清残留（待用户批）**：`/var/lib/flatpak` 1.4G（仅 runtime，无应用）+ `~/.local/share/flatpak` 52K + `~/.cache/flatpak` 7.4M + `~/.var/app` 88K ≈ **1.5G**。⚠️ 删除不可逆（红线 10），必须用户点头后执行
