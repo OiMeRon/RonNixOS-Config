@@ -45,6 +45,7 @@
         ./modules/gopeed.nix
         ./modules/clashmi.nix
         ./modules/cline.nix
+        ./modules/qoder-cli.nix
         ./modules/paperwm-zh.nix
         ./modules/herdr.nix
         ./modules/multica.nix
