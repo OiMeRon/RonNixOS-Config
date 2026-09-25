@@ -177,7 +177,6 @@ in
     nodejs
     # 终端 AI 编码代理。26.05 稳定版冻结在 1.15.10 太旧，改走 nixpkgs-unstable（2026-09-23）
     pkgs-unstable.opencode
-    pkgs-unstable.telegram-desktop
     obs-studio
     openjdk
     php
