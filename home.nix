@@ -237,20 +237,25 @@
     done
   '';
 
-  # 自动提交脚本
+  # 自动提交脚本：timer 直接调用这一份（单一实现，避免与内联命令两份逻辑漂移）
   home.file.".local/bin/git-sync" = {
     source = pkgs.writeShellScript "git-sync" ''
       #!/usr/bin/env bash
-      set -e
-      cd ~/nixos-config
+      set -euo pipefail
+      cd "$HOME/nixos-config"
       git add -A
-      if git diff --cached --quiet; then
-        echo "无变更"
-      else
-        git commit -m "sync: $(date '+%Y-%m-%d %H:%M:%S')"
-        git push
-        echo "已提交并推送"
+      # 没有新内容也要继续往下走：本地可能攒着没推出去的提交
+      # （旧版在“无变更”时直接结束，连 push 都不试，提交会一直搁浅）
+      git diff --cached --quiet || git commit -m "auto: $(date '+%Y-%m-%d_%H:%M')"
+      # 先取远端再推：远端可能已被别的机器/会话推进
+      # （2026-09-26 push 被拒 ! [rejected] (fetch first) 就是这个原因）
+      git fetch origin main
+      if ! git merge --no-edit --autostash origin/main; then
+        git merge --abort || true
+        echo "git-sync: 与远端合并冲突，已回滚本次合并，需人工处理" >&2
+        exit 1
       fi
+      git push
     '';
     executable = true;
   };
@@ -268,24 +273,32 @@
     Unit.Description = "Sync NixOS config to GitHub";
     Service = {
       Type = "oneshot";
-      ExecStart = "${pkgs.bash}/bin/bash -c 'cd /home/ron/nixos-config && ${pkgs.git}/bin/git add -A && (${pkgs.git}/bin/git diff --cached --quiet || (${pkgs.git}/bin/git commit -m \"auto: $(date +%%Y-%%m-%%d_%%H:%%M)\" && ${pkgs.git}/bin/git push))'";
+      ExecStart = "${config.home.homeDirectory}/.local/bin/git-sync";
+      path = [ pkgs.git pkgs.coreutils ]; # 脚本里裸用 git / date
     };
   };
 
-  # Obsidian vault 同步
+  # Obsidian vault 同步：timer 直接调用这一份
   home.file.".local/bin/vault-sync" = {
     source = pkgs.writeShellScript "vault-sync" ''
       #!/usr/bin/env bash
-      set -e
-      cd ~/Data/文档/ObsidianVault
+      set -euo pipefail
+      cd "$HOME/Data/文档/ObsidianVault"
       git add -A
-      if git diff --cached --quiet; then
-        echo "无变更"
-      else
-        git commit -m "vault backup: $(date '+%Y-%m-%d %H:%M:%S')"
-        git push
-        echo "已提交并推送"
+      # 没有新内容也要继续往下走：本地可能攒着没推出去的提交
+      git diff --cached --quiet || git commit -m "vault backup: $(date '+%Y-%m-%d_%H:%M')"
+      # 先取远端再推：远端可能已被别的机器推进
+      # （2026-09-26 01:39 有另一台设备推了 a0717cf，本机 10:42 push 被拒）
+      git fetch origin main
+      # 用 merge 不用 rebase：rebase 会先检出远端的 data.json（瘦身版）再回放本地补丁，
+      # 等于每轮都清掉本地 RSS 缓存；merge 只在远端 data.json 真变化时才动它
+      # （副作用见 .git-filters/README.md）
+      if ! git merge --no-edit --autostash origin/main; then
+        git merge --abort || true
+        echo "vault-sync: 与远端合并冲突，已回滚本次合并，需人工处理" >&2
+        exit 1
       fi
+      git push
     '';
     executable = true;
   };
@@ -302,7 +315,8 @@
     Unit.Description = "Sync Obsidian vault to GitHub";
     Service = {
       Type = "oneshot";
-      ExecStart = "${pkgs.bash}/bin/bash -c 'cd /home/ron/Data/文档/ObsidianVault && ${pkgs.git}/bin/git add -A && (${pkgs.git}/bin/git diff --cached --quiet || (${pkgs.git}/bin/git commit -m \"vault backup: $(date +%%Y-%%m-%%d_%%H:%%M)\" && ${pkgs.git}/bin/git push))'";
+      ExecStart = "${config.home.homeDirectory}/.local/bin/vault-sync";
+      path = [ pkgs.git pkgs.coreutils ]; # 脚本里裸用 git / date
     };
   };
 
