@@ -50,7 +50,6 @@
         ./modules/paperwm-zh.nix
         ./modules/herdr.nix
         ./modules/multica.nix
-        ./modules/ghidra.nix
         ./modules/user-file-structure.nix
         home-manager.nixosModules.home-manager
         {
