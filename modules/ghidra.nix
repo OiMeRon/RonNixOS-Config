@@ -11,6 +11,13 @@
 #   sha256:ddac49f903da9d5bac833e5cc79395098b9c33cfd3279be5f31bd00387d2d4db
 #   2026-09-27 用 GitHub API 核对过，tag = Ghidra_12.1.4_build
 #
+# ── 为什么用 fetchurl 而不是 nixpkgs 那套 fetchzip ────────────────
+# 2026-09-27 实测：本机直连 GitHub release 只有 ~45KB/s，570MB 要 3.5 小时。
+# fetchzip 的输出路径是**解压后 NAR 的哈希**，没法预先塞进 store；fetchurl 用
+# zip 自身的 flat 哈希，所以可以：并行分块下到本地 → sha256 校验 →
+# nix store prefetch-file 放进 store → rebuild 直接命中，不重复下载。
+# 声明里的 url 仍是官方地址，store 里被 gc 掉后会照常回官方源重下。
+#
 # ── 放哪（按本机目录宪法）──────────────────────────────────────────
 #   程序本体  → /nix/store/...-ghidra-12.1.4（不可变，声明式管）
 #               **不放** ~/OmniStudio/Applications/：那条规则针对 store 外的
@@ -31,8 +38,11 @@ let
   version = "12.1.4";
   versiondate = "20260921";
 
-  src = pkgs.fetchzip {
+  src = pkgs.fetchurl {
     url = "https://github.com/NationalSecurityAgency/ghidra/releases/download/Ghidra_${version}_build/ghidra_${version}_PUBLIC_${versiondate}.zip";
+    # 显式写死 name：fetchurl 的 store 路径 = flat 哈希 + name，
+    # 预下载塞 store 时要能算出同一个路径
+    name = "ghidra_${version}_PUBLIC_${versiondate}.zip";
     hash = "sha256-3wwet6id3kovxledhzompe4vbgfzym6p2mtzxzptdpiahb6s2tnq";
   };
 
@@ -58,6 +68,7 @@ let
     nativeBuildInputs = [
       pkgs.makeWrapper
       pkgs.icoutils
+      pkgs.unzip  # fetchurl 只负责下 zip，unpackPhase 解压要 unzip
     ]
     ++ lib.optionals pkgs.stdenv.hostPlatform.isLinux [ pkgs.autoPatchelfHook ];
 
