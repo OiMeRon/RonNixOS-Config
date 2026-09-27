@@ -42,11 +42,20 @@ let
     # 显式 name：fetchurl 的 store 路径 = flat 哈希 + name，
     # 预下载塞 store 时要能算出同一个路径
     name = "omo-linux-x64";
-    hash = "sha256-xyz6oyd7kr75yqfinggrwsbueb2ckuwzlrju7gnkln54nq5oca2a";
+    # 官方 SHA256SUMS 的 hex：be33e7607f547fdc40a8698d1b483420742552d95c534f99aa5b7bc6c3ae1034
+    # 注意：下面的 SRI 是 `nix hash to-sri` 生成的 base64 形式。**不要**用 Python
+    # b32encode 从 hex 自己转 base32 —— Nix 的 base32 位序不是 RFC-4648，
+    # 转出来的串 Nix 会报 "invalid nix32 hash"（2026-09-28 实测踩过）。
+    hash = "sha256-vjPnYH9Uf9xAqGmNG0g0IHQlUtlcU0+Zqlt7xsOuEDQ=";
   };
 
   # 外来预编译二进制：走 autoPatchelf 把 ELF 解释器指到 nixpkgs 的 glibc，
   # 不依赖 /lib64/ld-linux-x86-64.so.2（那是指向 nix-ld 的兼容软链）
+  #
+  # 构建期不做 `omo --version` 冒烟测试：omo 连 --version 都会
+  # provisionEmbeddedRuntime（往 $HOME/.omo 写运行时），而 nix 构建沙箱里
+  # HOME=/homeless-shelter 是只读的，mkdir 直接 EACCES（2026-09-28 实测）。
+  # 验证放到 switch 之后在真实 HOME 下做。
   omo = pkgs.runCommand "omo-${version}"
     {
       nativeBuildInputs = [
@@ -57,8 +66,6 @@ let
     ''
       install -Dm755 ${src} $out/bin/omo
       autoPatchelf $out/bin/omo
-      # 顺手确认它能在这个环境里被内核加载（--version 不触发运行时展开）
-      $out/bin/omo --version > /dev/null
     '';
 in
 {
