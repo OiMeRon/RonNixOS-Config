@@ -176,6 +176,8 @@
     config.lib.file.mkOutOfStoreSymlink "/home/ron/nixos-config/MEMORY.md";
   home.file.".kimi-code/NIXOS-OPS.md".source =
     config.lib.file.mkOutOfStoreSymlink "/home/ron/nixos-config/NIXOS-OPS.md";
+  home.file.".kimi-code/NIX-SKILLS.md".source =
+    config.lib.file.mkOutOfStoreSymlink "/home/ron/nixos-config/NIX-SKILLS.md";
   home.file."AGENTS.md".source =
     config.lib.file.mkOutOfStoreSymlink "/home/ron/nixos-config/AGENTS.md";
   home.file.".clinerules/01-nixos-redlines.md".source =
@@ -184,6 +186,8 @@
     config.lib.file.mkOutOfStoreSymlink "/home/ron/nixos-config/NIXOS-OPS.md";
   home.file.".clinerules/03-machine-memory.md".source =
     config.lib.file.mkOutOfStoreSymlink "/home/ron/nixos-config/MEMORY.md";
+  home.file.".clinerules/04-nix-skills.md".source =
+    config.lib.file.mkOutOfStoreSymlink "/home/ron/nixos-config/NIX-SKILLS.md";
 
   # opencode 全局配置：源在仓库，软链到 ~/.config/opencode/（同上，mkOutOfStoreSymlink
   # 指向仓库工作区，配置可写、受 git 管）。同目录的 package.json/node_modules/
