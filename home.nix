@@ -227,8 +227,7 @@
     compdir="$HOME/.local/share/bash-completion/completions"
     mkdir -p "$compdir"
     for spec in \
-      "$HOME/OmniStudio/Applications/Extracted/herdr/herdr herdr" \
-      "$HOME/OmniStudio/Applications/Extracted/multica/multica multica"
+      "$HOME/OmniStudio/Applications/Extracted/herdr/herdr herdr"
     do
       set -- $spec
       if [ -x "$1" ]; then

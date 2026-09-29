@@ -49,7 +49,6 @@
         ./modules/qoder-cli.nix
         ./modules/paperwm-zh.nix
         ./modules/herdr.nix
-        ./modules/multica.nix
         ./modules/omo.nix
         ./modules/user-file-structure.nix
         home-manager.nixosModules.home-manager
