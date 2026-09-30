@@ -113,10 +113,13 @@ in
   services.flatpak.enable = true;
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
+  # "input" 是 MOSS 听写读 /dev/input 事件所需（见 modules/moss-voice.nix）。
+  # 直接加在这一行而不是模块里，是因为 NixOS 的普通 list 是「后定义覆盖前定义」，
+  # 在独立模块里再赋一次会把 networkmanager/wheel 冲掉。
   users.users."ron" = {
     isNormalUser = true;
     description = "Ron";
-    extraGroups = [ "networkmanager" "wheel" ];
+    extraGroups = [ "networkmanager" "wheel" "input" ];
   };
 
   programs.firefox.enable = true;
