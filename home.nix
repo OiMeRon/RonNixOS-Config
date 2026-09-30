@@ -1,6 +1,7 @@
 { appimage-install, pkgs, lib, config, ... }:
 
 {
+  imports = [ ./modules/cursor-theme.nix ];
 
   home.homeDirectory = "/home/ron";
   home.stateVersion = "26.05";
@@ -63,7 +64,11 @@
     "org/gnome/desktop/interface" = {
       gtk-theme = "MacTahoe-Dark";
       icon-theme = "Adwaita";
-      cursor-theme = "Adwaita";
+      # 指针主题：Moga-Cursor（蓝色）。素材在 ~/Data/apps/icons/moga-cursor/，
+      # 由 modules/cursor-theme.nix 建 ~/.icons/Moga-Cursor 软链。
+      # 这个键只能在此处声明一次 —— dconf.settings 每次 switch 会整份覆盖，
+      # 另处用 gsettings 改会被打回（2026-09-30 踩过）。
+      cursor-theme = "Moga-Cursor";
     };
 
     # 默认终端：GNOME 出厂值指向系统里不存在的 xdg-terminal-exec，
@@ -327,7 +332,7 @@
     };
   };
 
-  # MOSS 听写：常驻监听麦克风静音键，按住说话，文字经剪贴板注入焦点窗口。
+  # Nix Voice 听写：常驻监听麦克风静音键，按住说话，文字经剪贴板注入焦点窗口。
   #
   # 依赖 modules/nix-voice.nix 的三项权限（input 组 / uinput 模块 / udev uaccess），
   # 两者必须同一次 rebuild 生效。任缺其一服务会起来但工作不了。
@@ -366,7 +371,7 @@
 
   systemd.user.services.nix-voice = {
     Unit = {
-      Description = "MOSS dictation daemon (hold mic-mute key to speak)";
+      Description = "Nix Voice dictation daemon (hold mic-mute key to speak)";
       # 必须在图形会话就绪之后：HUD 是 GTK3 窗口、剪贴板需要 DISPLAY/XAUTHORITY。
       # systemd --user 里这些变量由 gnome-session 导出（实测存在）。
       After = [ "graphical-session.target" ];
