@@ -1,9 +1,7 @@
 { appimage-install, pkgs, lib, config, ... }:
 
 {
-  imports = [ ./modules/agent-skills.nix ];
 
-  home.username = "ron";
   home.homeDirectory = "/home/ron";
   home.stateVersion = "26.05";
 
