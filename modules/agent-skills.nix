@@ -1,4 +1,4 @@
-# 第三方 agent 技能：钉 rev 拉进 store，软链到 ~/.agents/skills/<技能名>
+# 第三方 agent 技能（78 个 / 12 个仓库）：钉 rev 拉进 store，软链到 ~/.agents/skills/<技能名>
 #
 # 为什么声明式：`~/.agents/skills` 原来靠 `npx skills add` 装，重装系统不恢复、
 # 不可复现。改成声明后：内容由 flake 决定，更新 = 改下面 rev 再 rebuild。
@@ -72,6 +72,26 @@ let
       repo = "apk-reverse";
       rev = "7b6c6932a95f";
       sha256 = "sha256-za00SD9xiXYol/BELWbh2VEXeTDA23/yvRK+fEwKaG4=";
+    };
+
+    # --- 视觉复刻三件套（2026-09-30 加）：照着视频/网页还原视觉效果
+    mblode-agent-skills = {
+      owner = "mblode";
+      repo = "agent-skills";
+      rev = "b42cf4353847";
+      sha256 = "sha256-P2bIBLtPQq4bvQtSR9dlSho/UF5JEN5LtfmcdSkcNcA=";
+    };
+    emilkowalski-skills = {
+      owner = "emilkowalski";
+      repo = "skills";
+      rev = "d16ebe60d09a";
+      sha256 = "sha256-VlN8S8SegCpQsIdhsq9Nrw3UTXWHRWYIJK8bcSALB0k=";
+    };
+    onewave-claude-skills = {
+      owner = "onewave-ai";
+      repo = "claude-skills";
+      rev = "f317e08649a6";
+      sha256 = "sha256-zB+At6gwJBX1TtLq9zW4l4kluq50foIOEhM/2dRe94w=";
     };
   };
 
@@ -188,6 +208,15 @@ let
     "typesafe-ai" = "typesafe-ai-skills/skills/typesafe-ai";
     "security-audit" = "security-audit-skill/skills/security-audit";
     "apk-reverse" = "apk-reverse/skills/apk-reverse";
+
+    # --- 视觉复刻 (3)：照着视频/网页还原效果，作者不给源码时用
+    # ui-animation：从录像拟合曲线，触发词含 "reverse engineer this motion"
+    "ui-animation" = "mblode-agent-skills/skills/ui-animation";
+    # animation-vocabulary：把「那个弹一下的」翻译成精确定义词
+    "animation-vocabulary" = "emilkowalski-skills/skills/animation-vocabulary";
+    # screenshot-to-code：截图 → 代码，并渲染回图片对比收敛视觉差距
+    # 注意该技能在仓库里位于根目录（不是 skills/ 下）
+    "screenshot-to-code" = "onewave-claude-skills/screenshot-to-code";
   };
   # "mattpocock-skills/skills/engineering/ask-matt" → "<store>/skills/engineering/ask-matt"
   resolve = spec:
