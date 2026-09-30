@@ -68,7 +68,7 @@
       # 由 modules/cursor-theme.nix 建 ~/.icons/Moga-Cursor 软链。
       # 这个键只能在此处声明一次 —— dconf.settings 每次 switch 会整份覆盖，
       # 另处用 gsettings 改会被打回（2026-09-30 踩过）。
-      cursor-theme = "Moga-Cursor";
+      cursor-theme = "Moga-Cursor-Blue";
     };
 
     # 默认终端：GNOME 出厂值指向系统里不存在的 xdg-terminal-exec，

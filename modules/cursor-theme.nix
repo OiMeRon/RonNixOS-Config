@@ -1,8 +1,14 @@
 # 鼠标指针主题
 #
-# 素材（Xcursor 文件）在 ~/Data/apps/icons/moga-cursor/，不在 store：
+# 鼠标指针主题
+#
+# 素材（Xcursor 文件）在 ~/Data/apps/icons/，不在 store：
 # 从 vsthemes.org 下载的第三方包，无许可证声明，仅自用。
 # 骨架由 user-file-structure.nix 声明，此模块只做引用。
+#
+#   moga-cursor/       上游原包（纯黑白：#1a1a1a 填充 + #ffffff 描边）
+#   moga-cursor-blue/  同上，灰黑填充改为蓝 #1a8aff，白描边保留
+#                      由 /tmp 的一次性脚本改色生成；换配色需重跑
 #
 # 这里只负责"把软链挂上"。光标主题名本身声明在 home.nix 的
 # dconf.settings 里（org/gnome/desktop/interface/cursor-theme）——
@@ -16,7 +22,8 @@
 
 let
   # 目录名必须等于 dconf 里 cursor-theme 的值，X11 靠目录名索引
-  themeName = "Moga-Cursor";
+  themeName = "Moga-Cursor-Blue";
+  cursorSource = "/home/ron/Data/apps/icons/moga-cursor-blue";
 in
 {
   # 软链到 ~/.icons/，这样 GTK/Qt 应用和 GNOME Shell 都能找到。
@@ -26,7 +33,7 @@ in
       theme="$HOME/.icons/${themeName}"
       if [ ! -e "$theme" ]; then
         mkdir -p "$HOME/.icons"
-        ln -sfn "/home/ron/Data/apps/icons/moga-cursor" "$theme"
+        ln -sfn "${cursorSource}" "$theme"
         echo "cursor-theme: 已挂载 ${themeName}"
       fi
     '';
