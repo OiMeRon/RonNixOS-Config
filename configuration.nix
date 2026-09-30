@@ -16,18 +16,11 @@ let
   ];
 
   motrixPath = "$HOME/OmniStudio/Applications/AppImage/Motrix-2.0.0-beta.39-x86_64.AppImage";
-  dimagentPath = "$HOME/OmniStudio/Applications/Extracted/DimAgent";
-
   motrix-wrapper = pkgs.writeShellScriptBin "motrix" ''
     export LD_LIBRARY_PATH=${pkgs.lib.makeLibraryPath (commonLibs ++ [ pkgs.qt5.qtbase pkgs.qt5.qtdeclarative pkgs.qt5.qtquickcontrols2 pkgs.SDL2 ])}:$LD_LIBRARY_PATH
     exec ${pkgs.appimage-run}/bin/appimage-run ${motrixPath} "$@"
   '';
 
-  dimagent-wrapper = pkgs.writeShellScriptBin "dimagent" ''
-    export LD_LIBRARY_PATH=${dimagentPath}:${pkgs.lib.makeLibraryPath commonLibs}:$LD_LIBRARY_PATH
-    cd ${dimagentPath}
-    exec ./DimAgent "$@"
-  '';
 in
 {
   imports =
@@ -213,7 +206,6 @@ in
     # 属「Incompatible extensions」（会改窗口形状 → 视觉 glitch，issue #763/#431）
     gnomeExtensions.paperwm
     motrix-wrapper
-    dimagent-wrapper
   ];
 
   system.stateVersion = "26.05";

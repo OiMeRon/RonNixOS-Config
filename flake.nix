@@ -51,6 +51,7 @@
         ./modules/paperwm-zh.nix
         ./modules/herdr.nix
         ./modules/omo.nix
+        ./modules/gozen.nix
         ./modules/user-file-structure.nix
         ./modules/nix-voice.nix
         home-manager.nixosModules.home-manager

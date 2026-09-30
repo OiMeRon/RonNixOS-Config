@@ -19,21 +19,7 @@
   ];
 
 
-  # DimAgent 桌面文件
-  home.file.".local/share/applications/dimagent.desktop" = {
-    text = ''
-      [Desktop Entry]
-      Name=DimAgent
-      Comment=DimAgent - Desktop Automation
-      Exec=dimagent %U
-      Icon=dimagent
-      Type=Application
-      Categories=Utility;Development;
-      Terminal=false
-      StartupWMClass=DimAgent
-      StartupNotify=true
-    '';
-  };
+
 
   # Obsidian 桌面文件（修复任务栏图标）
   home.file.".local/share/applications/obsidian.desktop" = {
