@@ -40,6 +40,7 @@
       };
       modules = [
         ./configuration.nix
+        ./modules/pi-agent.nix
         ./modules/qq.nix
         ./modules/wechat.nix
         ./modules/gopeed.nix
