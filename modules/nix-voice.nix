@@ -1,8 +1,8 @@
-# MOSS 听写（全局语音输入）运行所需的三项系统权限。
+# Nix Voice 听写（全局语音输入）运行所需的三项系统权限。
 #
-# 背景：项目 ~/Data/项目/语音输入法测试/moss-voice 通过 /dev/input 读物理按键
+# 背景：项目 ~/Data/项目/语音输入法测试/nix-voice 通过 /dev/input 读物理按键
 # 作为听写触发键，通过 /dev/uinput 合成 Ctrl+V 粘贴键把文字送进焦点窗口。
-# 三项缺一不可，且必须与 home.nix 里的 systemd.user.services.moss-voice
+# 三项缺一不可，且必须与 home.nix 里的 systemd.user.services.nix-voice
 # 在同一次 rebuild 生效——否则常驻的是一个必然失败的进程。
 #
 # 决策依据：docs/adr/0001（弃用 IBus，改用合成按键）、

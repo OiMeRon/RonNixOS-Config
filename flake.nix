@@ -52,7 +52,7 @@
         ./modules/herdr.nix
         ./modules/omo.nix
         ./modules/user-file-structure.nix
-        ./modules/moss-voice.nix
+        ./modules/nix-voice.nix
         home-manager.nixosModules.home-manager
         {
           home-manager.useGlobalPkgs = true;

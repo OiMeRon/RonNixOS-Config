@@ -329,17 +329,17 @@
 
   # MOSS 听写：常驻监听麦克风静音键，按住说话，文字经剪贴板注入焦点窗口。
   #
-  # 依赖 modules/moss-voice.nix 的三项权限（input 组 / uinput 模块 / udev uaccess），
+  # 依赖 modules/nix-voice.nix 的三项权限（input 组 / uinput 模块 / udev uaccess），
   # 两者必须同一次 rebuild 生效。任缺其一服务会起来但工作不了。
   #
   # 包装成脚本而不是直接 ExecStart python，理由同 git-sync：systemd user service
   # 的环境变量与 PATH 不可控，需要精确控制 GST_PLUGIN_PATH / LD_LIBRARY_PATH /
   # GI_TYPELIB_PATH 才能加载到 GStreamer、GTK3 与 PipeWire 插件。
-  home.file.".local/bin/moss-voice" = {
-    source = pkgs.writeShellScript "moss-voice" ''
+  home.file.".local/bin/nix-voice" = {
+    source = pkgs.writeShellScript "nix-voice" ''
       #!/usr/bin/env bash
       set -euo pipefail
-      APP="/home/ron/Data/项目/语音输入法测试/moss-voice"
+      APP="/home/ron/Data/项目/语音输入法测试/nix-voice"
       cd "$APP"
       # .env-paths 里是本项目实测可用的 store 路径
       # shellcheck disable=SC1091
@@ -359,12 +359,12 @@
       export GDK_BACKEND=x11
       export PYTHONUNBUFFERED=1
 
-      exec "$APP/.venv/bin/python" "$APP/daemon.py" --config "$APP/config.toml" "$@"
+      exec "$APP/.venv/bin/python" -m nix_voice.daemon --config "$APP/config.toml" "$@"
     '';
     executable = true;
   };
 
-  systemd.user.services.moss-voice = {
+  systemd.user.services.nix-voice = {
     Unit = {
       Description = "MOSS dictation daemon (hold mic-mute key to speak)";
       # 必须在图形会话就绪之后：HUD 是 GTK3 窗口、剪贴板需要 DISPLAY/XAUTHORITY。
@@ -374,7 +374,7 @@
       PartOf = [ "graphical-session.target" ];
     };
     Service = {
-      ExecStart = "${config.home.homeDirectory}/.local/bin/moss-voice";
+      ExecStart = "${config.home.homeDirectory}/.local/bin/nix-voice";
       Restart = "on-failure";
       # 模型 1.9GB 常驻 + 首次加载 ~5s，给足启动时间
       TimeoutStartSec = 60;
