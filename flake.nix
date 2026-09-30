@@ -52,6 +52,7 @@
         ./modules/herdr.nix
         ./modules/omo.nix
         ./modules/gozen.nix
+        ./modules/magnitude.nix
         ./modules/user-file-structure.nix
         ./modules/nix-voice.nix
         home-manager.nixosModules.home-manager
