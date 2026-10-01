@@ -18,7 +18,7 @@ let
     '';
 
     nodejs = pkgs.nodejs_24;
-    npmDepsHash = lib.fakeHash;
+    npmDepsHash = "sha256-BweGfO+FZmQQ+uKI29fSdLCIHrS6HREUE7zQItFsbNU=";
     dontNpmBuild = true;
     dontStrip = true;
 

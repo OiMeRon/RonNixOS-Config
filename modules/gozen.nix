@@ -41,7 +41,7 @@ let
     terminal = false;
     icon = "gozen";
     type = "Application";
-    categories = [ "AudioVideo" "Video" "Editing" ];
+    categories = [ "AudioVideo" "Video" "AudioVideoEditing" ];
     mimeTypes = [
       "video/mp4" "video/x-matroska" "video/webm" "video/avi"
       "video/quicktime" "video/x-flv" "video/x-msvideo"
