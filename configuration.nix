@@ -205,6 +205,23 @@ in
     # 官方 README：Dash to Dock 属「Recommended extensions」；Rounded Window Corners
     # 属「Incompatible extensions」（会改窗口形状 → 视觉 glitch，issue #763/#431）
     gnomeExtensions.paperwm
+    # 顶栏资源监控：CPU（含每核）/ 内存 / swap / 磁盘 / 网络 / 温度（2026-10-02）
+    #
+    # GPU 那一栏在这台机器上是空的，别以为是装坏了。实测 Intel Arc B390 走 xe 驱动，
+    # sysfs 里扩展要读的那 8 条路径一条都没有：
+    #   gpu_busy_percent / gt_busy_percent            （GPU 利用率）
+    #   mem_info_vram_{total,used}                    （显存）
+    #   lmem_{total,used}_bytes / local_memory_*_bytes
+    #   /sys/class/hwmon 下的 GPU 条目                 （GPU 温度）
+    # 它按 vendor=0x8086 匹配到 card0 就建描述符（services/runtime.js:225），
+    # 所以会显示一个**空的** Intel GPU 行。CPU/内存/温度部分完全正常，
+    # 本机 coretemp 有 25 个传感器、nvme 8 个。
+    #
+    # xe 真正的遥测在 PMU（/sys/bus/event_source/devices/xe_0000_00_02.0 的
+    # engine-active-ticks / engine-total-ticks），那是 perf 事件，扩展读不到；
+    # 而 intel_gpu_top 2.3 只认 i915，跑在这台机器上直接报
+    # "no discrete/integrated i915 devices found"。要真 GPU 数字得换工具。
+    gnomeExtensions.resource-monitor
     motrix-wrapper
   ];
 
