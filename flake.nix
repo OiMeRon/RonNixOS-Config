@@ -26,17 +26,17 @@
       url = "https://gh-proxy.com/https://github.com/rxtsel/appimage-install/archive/main.tar.gz";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    # Own software, built from its own repository. `path:` is what makes this
-    # pure-eval legal: a flake input is copied into the store, whereas the
+    # Own software, built from its own repository. A flake input is what makes
+    # this pure-eval legal: it is fetched and locked, whereas the
     # `imports = [ ... nix/module.nix ]` this replaced was an absolute path
     # literal and `nix flake check` rejected it outright.
     #
-    # The body lives in OmniStudio/Applications/Owned/ per
-    # ~/OmniStudio/AGENTS.md. It used to sit under ~/Data/项目/, and that was
-    # not a preference: Nix refuses path literals containing non-ASCII bytes,
-    # so the whole path had to be ASCII before a flake input could read it.
+    # git+https, not path:. A path: input only exists on this machine, so a
+    # rebuild anywhere else would fail with "cannot find flake". The repo is
+    # private, so clone it here if the input cannot be resolved:
+    #   git config --global url."git@github.com:".insteadOf "https://github.com/"
     nix-voice = {
-      url = "path:/home/ron/OmniStudio/Applications/Owned/nix-voice";
+      url = "git+https://github.com/OiMeRon/nix-voice.git";
       # One nixpkgs for the whole system. Without this the input carries its own
       # pinned nixpkgs and the store holds two copies.
       inputs.nixpkgs.follows = "nixpkgs";

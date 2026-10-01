@@ -318,62 +318,18 @@
     };
   };
 
-  # Nix Voice 听写：常驻监听麦克风静音键，按住说话，文字经剪贴板注入焦点窗口。
+  # Nix Voice 不在这里声明。
   #
-  # 依赖 modules/nix-voice.nix 的三项权限（input 组 / uinput 模块 / udev uaccess），
-  # 两者必须同一次 rebuild 生效。任缺其一服务会起来但工作不了。
+  # 原来这一段手写了 wrapper（source 里的 .env-paths + 十一条 store 路径）
+  # 和 systemd 单元，两者都被 services.nix-voice（modules/nix-voice.nix
+  # 经 flake input 引入）取代了：
+  #   * 服务单元  → module.nix，用 x-systemd.wantedBy
+  #   * 依赖路径  → package.nix 的 launcher，全部 ${pkgs...} 插值
+  #   * 配置      → ~/.config/nix-voice/config.toml
   #
-  # 包装成脚本而不是直接 ExecStart python，理由同 git-sync：systemd user service
-  # 的环境变量与 PATH 不可控，需要精确控制 GST_PLUGIN_PATH / LD_LIBRARY_PATH /
-  # GI_TYPELIB_PATH 才能加载到 GStreamer、GTK3 与 PipeWire 插件。
-  home.file.".local/bin/nix-voice" = {
-    source = pkgs.writeShellScript "nix-voice" ''
-      #!/usr/bin/env bash
-      set -euo pipefail
-      APP="/home/ron/OmniStudio/Applications/Owned/nix-voice"
-      cd "$APP"
-      # .env-paths 里是本项目实测可用的 store 路径
-      # shellcheck disable=SC1091
-      . "$APP/.env-paths"
-
-      # libgstpipewire.so 在 pipewire 包里，不在 gst-plugins-* 里。
-      # 缺了它 autoaudiosrc 会静默退化成 ALSA 直抓，抓到本机没插设备的
-      # 模拟麦克风插孔（实测 peak=0.0000 全程静音），识别结果全是幻觉。
-      # 路径走 ${pkgs.pipewire} 而非字面 store path，nixpkgs 升级不会失效。
-      # 注：$GST/$GSTBASE/$GSTGOOD/$GUIENV 仍来自 .env-paths 里的字面路径，
-      # 那是本项目既有设计，nixpkgs 大版本升级后需重新采集。
-      export GST_PLUGIN_PATH="${pkgs.pipewire}/lib/gstreamer-1.0:$GST/lib/gstreamer-1.0:$GSTBASE/lib/gstreamer-1.0:$GSTGOOD/lib/gstreamer-1.0"
-      export LD_LIBRARY_PATH="$GST/lib:$GSTBASE/lib:$GSTGOOD/lib:$GUIENV/lib"
-      export GI_TYPELIB_PATH="$GST/lib/girepository-1.0:$GII/lib/girepository-1.0:$PANGO/lib/girepository-1.0:$GUIENV/lib/girepository-1.0"
-      export PYTHONPATH="$APP/src:$PY311/lib/python3.11/site-packages"
-      # HUD 和剪贴板都走 GTK3 → 必须是 XWayland（GNOME Wayland 下 GTK4 无法定位窗口）
-      export GDK_BACKEND=x11
-      export PYTHONUNBUFFERED=1
-
-      exec "$APP/.venv/bin/python" -m nix_voice.daemon --config "$APP/config.toml" "$@"
-    '';
-    executable = true;
-  };
-
-  systemd.user.services.nix-voice = {
-    Unit = {
-      Description = "Nix Voice dictation daemon (hold mic-mute key to speak)";
-      # 必须在图形会话就绪之后：HUD 是 GTK3 窗口、剪贴板需要 DISPLAY/XAUTHORITY。
-      # systemd --user 里这些变量由 gnome-session 导出（实测存在）。
-      After = [ "graphical-session.target" ];
-      # 图形会话退出时一起停，避免留下孤儿进程持有 uinput
-      PartOf = [ "graphical-session.target" ];
-    };
-    Service = {
-      ExecStart = "${config.home.homeDirectory}/.local/bin/nix-voice";
-      Restart = "on-failure";
-      # 模型 1.9GB 常驻 + 首次加载 ~5s，给足启动时间
-      TimeoutStartSec = 60;
-      # 崩溃退避，避免配置错误时疯狂重启刷屏
-      RestartSec = 5;
-    };
-    Install.WantedBy = [ "graphical-session.target" ];
-  };
+  # 旧写法把两个 store 路径（python3-3.11.16-env、moss-gtk3-env）挂在
+  # 系统闭包之外，只靠一个陈旧的 indirect root 活着，跑一次
+  # nix-collect-garbage 就会静默失效。
 
   programs.git = {
     enable = true;

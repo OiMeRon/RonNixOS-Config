@@ -81,14 +81,17 @@
         ]
       },
       "locked": {
-        "lastModified": 1790834102,
-        "narHash": "sha256-COp3o6/A3SNKYHCRG4KsHstmVLY3I1epv1Q0j3XlMGQ=",
-        "path": "/home/ron/OmniStudio/Applications/Owned/nix-voice",
-        "type": "path"
+        "lastModified": 1790868992,
+        "narHash": "sha256-bTun0dKgrIQXfAICxdBuOwBg1gcu0CnUte7+1z5mGhA=",
+        "ref": "refs/heads/main",
+        "rev": "75d5e417b39e899d1a392bc36e01aad3a43ace71",
+        "revCount": 35,
+        "type": "git",
+        "url": "https://github.com/OiMeRon/nix-voice.git"
       },
       "original": {
-        "path": "/home/ron/OmniStudio/Applications/Owned/nix-voice",
-        "type": "path"
+        "type": "git",
+        "url": "https://github.com/OiMeRon/nix-voice.git"
       }
     },
     "nixpkgs": {
