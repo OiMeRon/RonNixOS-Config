@@ -51,13 +51,9 @@ let
 
   # 用 derivation 装进 system profile，落到 /run/current-system/sw/share/icons/，
   # 在 XDG_DATA_DIRS 里，应用程序才能查到（/usr/share/icons 不在 XDG_DATA_DIRS 里）
-  gozenIconSrc = builtins.path {
-    path = /home/ron/Data/apps/icons/gozen.png;
-    name = "gozen-icon-src";
-  };
   gozenIcon = pkgs.runCommand "gozen-icon" { } ''
     mkdir -p $out/share/icons/hicolor/128x128/apps
-    cp ${gozenIconSrc} $out/share/icons/hicolor/128x128/apps/gozen.png
+    cp ${./gozen-icon.png} $out/share/icons/hicolor/128x128/apps/gozen.png
   '';
 in
 {
