@@ -81,8 +81,8 @@
         ]
       },
       "locked": {
-        "lastModified": 1790833589,
-        "narHash": "sha256-iv/P4pR0OU2qjyXEMC3Lau7vwW89Ki0wQsdRrnNC6t4=",
+        "lastModified": 1790834102,
+        "narHash": "sha256-COp3o6/A3SNKYHCRG4KsHstmVLY3I1epv1Q0j3XlMGQ=",
         "path": "/home/ron/OmniStudio/Applications/Owned/nix-voice",
         "type": "path"
       },
