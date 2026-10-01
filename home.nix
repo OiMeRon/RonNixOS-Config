@@ -330,7 +330,7 @@
     source = pkgs.writeShellScript "nix-voice" ''
       #!/usr/bin/env bash
       set -euo pipefail
-      APP="/home/ron/Data/项目/语音输入法测试/nix-voice"
+      APP="/home/ron/OmniStudio/Applications/Owned/nix-voice"
       cd "$APP"
       # .env-paths 里是本项目实测可用的 store 路径
       # shellcheck disable=SC1091

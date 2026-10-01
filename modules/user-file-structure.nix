@@ -45,6 +45,7 @@ let
     "/home/ron/OmniStudio/Applications"
     "/home/ron/OmniStudio/Applications/AppImage"
     "/home/ron/OmniStudio/Applications/Extracted"
+    "/home/ron/OmniStudio/Applications/Owned"
     "/home/ron/OmniStudio/Applications/Scripts"
   ];
 

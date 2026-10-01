@@ -1,7 +1,7 @@
-{ lib, pkgs, ... }:
+{ pkgs, lib, ... }:
 
 let
-  version = "1.65.2";
+  version = "1.73.2";
 
   commandCode = pkgs.buildNpmPackage {
     pname = "command-code";
@@ -9,7 +9,7 @@ let
 
     src = pkgs.fetchurl {
       url = "https://registry.npmjs.org/command-code/-/command-code-${version}.tgz";
-      hash = "sha256-LJnA8XC9Vd+ZUh0mKP7013AMchklvkGlpmA5YG+s/hY=";
+      hash = "sha256-xnMOHLYto5gTP7zD7SXrzCmh5yDRLcXeo2+Mdzi4KUI=";
     };
 
     postPatch = ''
@@ -18,7 +18,7 @@ let
     '';
 
     nodejs = pkgs.nodejs_24;
-    npmDepsHash = "sha256-BweGfO+FZmQQ+uKI29fSdLCIHrS6HREUE7zQItFsbNU=";
+    npmDepsHash = lib.fakeHash;
     dontNpmBuild = true;
     dontStrip = true;
 
