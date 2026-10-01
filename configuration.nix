@@ -205,23 +205,21 @@ in
     # 官方 README：Dash to Dock 属「Recommended extensions」；Rounded Window Corners
     # 属「Incompatible extensions」（会改窗口形状 → 视觉 glitch，issue #763/#431）
     gnomeExtensions.paperwm
-    # 顶栏资源监控：CPU（含每核）/ 内存 / swap / 磁盘 / 网络 / 温度（2026-10-02）
+    # 顶栏资源监控（2026-10-02）。选它而不是 Resource Monitor，是因为后者只会常驻一行
+    # 文字：79 个 gsettings key 里没有任何 dropdown/menu/graph 项，左键走
+    # _launchPrimaryAction() 去 spawn 一个外部程序（默认还是空的），整个扩展没 import 过
+    # popupMenu.js。Vitals 有 panelMenu.js + popupMenu.js，点顶栏图标弹出完整面板。
+    # 默认值就是想要的形态：顶栏只 3 项（内存%、1 分钟负载、网络接收），
+    # 其余（温度/电压/风扇/内存/CPU/负载/存储/网络）全在下拉面板里。
     #
-    # GPU 那一栏在这台机器上是空的，别以为是装坏了。实测 Intel Arc B390 走 xe 驱动，
-    # sysfs 里扩展要读的那 8 条路径一条都没有：
-    #   gpu_busy_percent / gt_busy_percent            （GPU 利用率）
-    #   mem_info_vram_{total,used}                    （显存）
-    #   lmem_{total,used}_bytes / local_memory_*_bytes
-    #   /sys/class/hwmon 下的 GPU 条目                 （GPU 温度）
-    # 它按 vendor=0x8086 匹配到 card0 就建描述符（services/runtime.js:225），
-    # 所以会显示一个**空的** Intel GPU 行。CPU/内存/温度部分完全正常，
-    # 本机 coretemp 有 25 个传感器、nvme 8 个。
-    #
-    # xe 真正的遥测在 PMU（/sys/bus/event_source/devices/xe_0000_00_02.0 的
-    # engine-active-ticks / engine-total-ticks），那是 perf 事件，扩展读不到；
-    # 而 intel_gpu_top 2.3 只认 i915，跑在这台机器上直接报
-    # "no discrete/integrated i915 devices found"。要真 GPU 数字得换工具。
-    gnomeExtensions.resource-monitor
+    # GPU 留默认关闭（show-gpu=false）。开了也是空的：Vitals 对非 NVIDIA 读的是
+    # /sys/class/drm/card{i}/device/gpu_busy_percent（sensors.js:720），
+    # Intel Arc B390 走 xe 驱动，该文件不存在；GPU 温度同理要走 hwmon，而
+    # /sys/class/hwmon 下没有任何 GPU 条目。xe 的真实遥测在 PMU
+    # （/sys/bus/event_source/devices/xe_0000_00_02.0 的 engine-active-ticks），
+    # 那是 perf 事件，扩展读不到；intel_gpu_top 2.3 只认 i915，在本机直接报
+    # "no discrete/integrated i915 devices found"。
+    gnomeExtensions.vitals
     motrix-wrapper
   ];
 
