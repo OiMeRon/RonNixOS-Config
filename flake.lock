@@ -81,11 +81,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1790868992,
-        "narHash": "sha256-bTun0dKgrIQXfAICxdBuOwBg1gcu0CnUte7+1z5mGhA=",
+        "lastModified": 1790869383,
+        "narHash": "sha256-0MRfztLTacRwNk0VJJ+lEiBLBX/f2Oo+ellv+cQREIg=",
         "ref": "refs/heads/main",
-        "rev": "75d5e417b39e899d1a392bc36e01aad3a43ace71",
-        "revCount": 35,
+        "rev": "73375ff8d5ef89d3cea9f57e9f5e2562221b539a",
+        "revCount": 36,
         "type": "git",
         "url": "https://github.com/OiMeRon/nix-voice.git"
       },
