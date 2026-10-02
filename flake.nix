@@ -72,7 +72,8 @@
         ./modules/gozen.nix
         ./modules/magnitude.nix
         ./modules/user-file-structure.nix
-        ./modules/nix-voice.nix
+./modules/nix-voice.nix
+        ./modules/wifi-firmware-recovery.nix
         home-manager.nixosModules.home-manager
         {
           home-manager.useGlobalPkgs = true;
